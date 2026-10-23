@@ -1,0 +1,779 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Orphia — MVP Wireframe Prototype</title>
+<style>
+  :root{
+    --bg:#FBF4E8;
+    --ink:#2B2015;
+    --muted:#8B7A62;
+    --primary:#C0392B;
+    --primary-dark:#8E2A3C;
+    --rust:#A8431F;
+    --carnation:#AE2E26;
+    --carnation-dark:#7E1F1A;
+    --card:#FFFFFF;
+    --border:#E8D9BC;
+    --gold:#E0A940;
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0;
+    font-family:-apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+    background:#F1E6D3;
+    color:var(--ink);
+  }
+  header{
+    padding:28px 32px 18px;
+    background:var(--primary-dark);
+    color:#fff;
+    display:flex; align-items:center; gap:14px;
+  }
+  header .brandmark{flex:0 0 auto;}
+  header h1{margin:0 0 4px; font-size:26px; display:flex; align-items:center; gap:10px;}
+  header p{margin:0; color:#F0DFC6; font-size:15px;}
+
+  .pillbar{
+    display:flex; flex-wrap:wrap; gap:8px;
+    padding:16px 32px; background:#fff; border-bottom:1px solid var(--border);
+    position:sticky; top:0; z-index:10;
+  }
+  .pill{
+    border:1px solid var(--border); background:var(--bg); color:var(--ink);
+    padding:8px 14px; border-radius:999px; font-size:13px; cursor:pointer;
+    white-space:nowrap;
+  }
+  .pill.active{background:var(--primary); color:#fff; border-color:var(--primary);}
+
+  .stage{
+    display:flex; gap:40px; padding:40px 32px; max-width:1100px; margin:0 auto;
+    align-items:flex-start; flex-wrap:wrap;
+  }
+
+  /* Phone frame */
+  .phone-wrap{flex:0 0 auto;}
+  .phone{
+    width:330px; height:670px;
+    background:#111; border-radius:40px; padding:14px;
+    box-shadow:0 20px 40px rgba(0,0,0,0.25);
+  }
+  .screen{
+    display:none;
+    width:100%; height:100%;
+    background:var(--bg);
+    border-radius:28px;
+    overflow:hidden;
+    position:relative;
+    flex-direction:column;
+  }
+  .screen.active{display:flex;}
+  .notch{
+    height:22px; width:120px; background:#111; border-radius:0 0 14px 14px;
+    position:absolute; top:0; left:50%; transform:translateX(-50%); z-index:5;
+  }
+  .screen-body{
+    flex:1; padding:40px 22px 20px; overflow-y:auto; display:flex; flex-direction:column;
+  }
+
+  /* Nav bar inside screens */
+  .topbar{
+    display:flex; align-items:center; justify-content:space-between;
+    padding:14px 18px 6px;
+  }
+  .topbar .back{font-size:22px; color:var(--primary-dark); cursor:pointer; font-weight:bold;}
+  .topbar .profile{
+    width:34px; height:34px; border-radius:50%; background:var(--primary); color:#fff;
+    display:flex; align-items:center; justify-content:center; font-size:16px; cursor:pointer;
+  }
+
+  h2.title{font-size:24px; margin:0 0 6px;}
+  p.sub{color:var(--muted); font-size:15px; margin:0 0 20px;}
+
+  .btn{
+    display:block; width:100%; text-align:center;
+    padding:18px; font-size:19px; font-weight:600;
+    border-radius:16px; border:none; cursor:pointer; margin-bottom:14px;
+    min-height:56px;
+  }
+  .btn-primary{background:var(--primary); color:#fff;}
+  .btn-secondary{background:#fff; color:var(--primary-dark); border:2px solid var(--primary);}
+  .btn-ghost{background:transparent; color:var(--muted); border:none; font-size:15px; text-decoration:underline;}
+
+  label{font-size:16px; font-weight:600; display:block; margin-bottom:8px;}
+  input[type=text]{
+    width:100%; padding:16px; font-size:19px; border-radius:12px;
+    border:2px solid var(--border); margin-bottom:22px; background:#fff;
+  }
+
+  /* PIN pad */
+  .dots{display:flex; gap:12px; justify-content:center; margin:6px 0 22px;}
+  .dot{width:16px; height:16px; border-radius:50%; border:2px solid var(--primary); }
+  .dot.filled{background:var(--primary);}
+  .pinpad{display:grid; grid-template-columns:repeat(3,1fr); gap:10px; margin-bottom:10px;}
+  .pinkey{
+    background:#fff; border:2px solid var(--border); border-radius:14px;
+    font-size:22px; padding:16px 0; text-align:center; cursor:pointer; font-weight:600;
+  }
+  .pinkey:active{background:var(--bg);}
+
+  /* genre cards */
+  .genre-list{display:flex; flex-direction:column; gap:10px; margin-bottom:16px;}
+  .genre-card{
+    display:flex; align-items:center; justify-content:space-between;
+    padding:16px 18px; background:#fff; border:2px solid var(--border);
+    border-radius:14px; font-size:18px; cursor:pointer;
+  }
+  .genre-card.selected{border-color:var(--primary); background:#FBE1DC;}
+  .check{
+    width:24px; height:24px; border-radius:50%; border:2px solid var(--border);
+    display:flex; align-items:center; justify-content:center; font-size:14px; color:#fff;
+  }
+  .genre-card.selected .check{background:var(--primary); border-color:var(--primary);}
+
+  /* home */
+  .welcome{font-size:26px; font-weight:700; margin:10px 0 24px;}
+  .continue-card{
+    background:#fff; border:2px solid var(--border); border-radius:16px; padding:16px;
+    margin-bottom:22px; display:flex; align-items:center; gap:12px;
+  }
+  .continue-card .art{width:48px; height:48px; border-radius:10px; background:var(--gold) center/cover no-repeat;}
+  .continue-card .txt{font-size:14px; color:var(--muted);}
+  .continue-card .txt b{color:var(--ink); font-size:16px; display:block;}
+
+  /* browse */
+  .decade-label{font-size:14px; font-weight:700; color:var(--muted); text-transform:uppercase; letter-spacing:1px; margin:18px 0 8px;}
+  .song-row{
+    display:flex; align-items:center; gap:14px; padding:14px 10px; border-bottom:1px solid var(--border);
+    cursor:pointer;
+  }
+  .song-row .art{width:46px; height:46px; border-radius:8px; background:var(--primary) center/cover no-repeat; flex:0 0 auto;}
+  .song-row .meta b{display:block; font-size:17px;}
+  .song-row .meta span{font-size:14px; color:var(--muted);}
+
+  /* playing */
+  .yt-wrap{
+    position:relative; width:100%; padding-bottom:56.25%; height:0;
+    border-radius:16px; overflow:hidden; margin:0 auto 18px; background:#111;
+  }
+  .yt-wrap iframe{position:absolute; top:0; left:0; width:100%; height:100%; border:0;}
+  .song-title{text-align:center; font-size:22px; font-weight:700; margin-bottom:2px;}
+  .song-artist{text-align:center; color:var(--muted); font-size:16px; margin-bottom:18px;}
+  .song-genre{text-align:center; color:var(--primary-dark); font-size:13px; font-weight:700; text-transform:uppercase; letter-spacing:0.5px; margin:-12px 0 18px;}
+  .lyrics{
+    background:#fff; border:2px solid var(--border); border-radius:14px; padding:16px; margin-bottom:18px;
+    font-size:17px; line-height:1.9; max-height:120px; overflow:hidden;
+  }
+  .lyrics .current{background:#FDEEC9; font-weight:700; border-radius:6px; padding:2px 4px;}
+  .lyrics .dim{color:#b8b4a8;}
+  .controls{display:flex; justify-content:space-between; align-items:center; margin-bottom:18px;}
+  .ctrl-btn{
+    width:52px; height:52px; border-radius:50%; background:#fff; border:2px solid var(--border);
+    font-size:20px; display:flex; align-items:center; justify-content:center; cursor:pointer;
+  }
+  .ctrl-btn.play{background:var(--primary); border-color:var(--primary); color:#fff; width:64px; height:64px; font-size:24px;}
+  .ctrl-btn.active{border-color:var(--rust); color:var(--rust);}
+  #heartBtn.active{border-color:var(--carnation); color:var(--carnation);}
+
+  /* memory */
+  .record-btn{
+    width:110px; height:110px; border-radius:50%; background:var(--rust); color:#fff;
+    margin:30px auto 16px; display:flex; align-items:center; justify-content:center; font-size:36px;
+    cursor:pointer; border:none;
+  }
+  .record-btn.recording{background:#6B1E22; animation:pulse 1.2s infinite;}
+  @keyframes pulse{0%{box-shadow:0 0 0 0 rgba(168,67,31,0.5);}70%{box-shadow:0 0 0 18px rgba(168,67,31,0);}100%{box-shadow:0 0 0 0 rgba(168,67,31,0);}}
+  .timer{text-align:center; font-size:20px; color:var(--muted); margin-bottom:24px;}
+  .record-hint{text-align:center; font-size:15px; color:var(--muted); margin-bottom:10px;}
+
+  /* memory library */
+  .memory-list{display:flex; flex-direction:column; gap:12px; margin-bottom:16px;}
+  .memory-card{
+    display:flex; align-items:center; gap:14px; padding:14px; background:#fff;
+    border:2px solid var(--border); border-radius:14px; cursor:pointer;
+  }
+  .memory-card .art{width:44px; height:44px; border-radius:8px; background:var(--primary) center/cover no-repeat; flex:0 0 auto;}
+  .memory-card .meta{flex:1; min-width:0;}
+  .memory-card .meta b{display:block; font-size:16px;}
+  .memory-card .meta span{display:block; font-size:13px; color:var(--muted); margin-top:2px;}
+  .memory-play{
+    width:44px; height:44px; border-radius:50%; background:var(--carnation); color:#fff; border:none;
+    display:flex; align-items:center; justify-content:center; font-size:15px; cursor:pointer; flex:0 0 auto;
+  }
+  .memory-play.playing{background:var(--carnation-dark);}
+  .memory-empty-hint{font-size:14px; color:var(--muted); text-align:center; margin-top:30px;}
+
+  /* notes panel */
+  .notes{
+    flex:1 1 360px; max-width:420px; background:var(--card); border:1px solid var(--border);
+    border-radius:18px; padding:24px 26px;
+  }
+  .notes h3{margin:0 0 4px; font-size:13px; letter-spacing:1px; text-transform:uppercase; color:var(--primary-dark);}
+  .notes h2{margin:0 0 14px; font-size:22px;}
+  .notes p{font-size:15px; line-height:1.6; color:#333; margin:0 0 16px;}
+  .notes ul{margin:0 0 16px; padding-left:20px;}
+  .notes li{font-size:14.5px; line-height:1.6; margin-bottom:6px; color:#333;}
+  .notes .tag{
+    display:inline-block; font-size:11px; font-weight:700; letter-spacing:0.5px;
+    padding:4px 10px; border-radius:999px; background:#FBE1DC; color:var(--primary-dark); margin-bottom:14px;
+  }
+  .notes .tag.new{background:#F7DCCF; color:var(--rust);}
+
+  footer{text-align:center; padding:30px; color:var(--muted); font-size:13px;}
+</style>
+</head>
+<body>
+
+<header>
+  <svg class="brandmark" width="34" height="34" viewBox="0 0 100 100" aria-hidden="true" focusable="false">
+    <ellipse cx="50" cy="32" rx="18" ry="12" fill="var(--carnation)" transform="rotate(0 50 50)"/>
+    <ellipse cx="50" cy="32" rx="18" ry="12" fill="var(--carnation)" transform="rotate(45 50 50)"/>
+    <ellipse cx="50" cy="32" rx="18" ry="12" fill="var(--carnation)" transform="rotate(90 50 50)"/>
+    <ellipse cx="50" cy="32" rx="18" ry="12" fill="var(--carnation)" transform="rotate(135 50 50)"/>
+    <ellipse cx="50" cy="32" rx="18" ry="12" fill="var(--carnation)" transform="rotate(180 50 50)"/>
+    <ellipse cx="50" cy="32" rx="18" ry="12" fill="var(--carnation)" transform="rotate(225 50 50)"/>
+    <ellipse cx="50" cy="32" rx="18" ry="12" fill="var(--carnation)" transform="rotate(270 50 50)"/>
+    <ellipse cx="50" cy="32" rx="18" ry="12" fill="var(--carnation)" transform="rotate(315 50 50)"/>
+    <ellipse cx="50" cy="38" rx="13" ry="9" fill="var(--carnation-dark)" transform="rotate(15 50 50)"/>
+    <ellipse cx="50" cy="38" rx="13" ry="9" fill="var(--carnation-dark)" transform="rotate(75 50 50)"/>
+    <ellipse cx="50" cy="38" rx="13" ry="9" fill="var(--carnation-dark)" transform="rotate(135 50 50)"/>
+    <ellipse cx="50" cy="38" rx="13" ry="9" fill="var(--carnation-dark)" transform="rotate(195 50 50)"/>
+    <ellipse cx="50" cy="38" rx="13" ry="9" fill="var(--carnation-dark)" transform="rotate(255 50 50)"/>
+    <ellipse cx="50" cy="38" rx="13" ry="9" fill="var(--carnation-dark)" transform="rotate(315 50 50)"/>
+    <circle cx="50" cy="50" r="7" fill="var(--gold)"/>
+  </svg>
+  <div>
+    <h1>Orphia — MVP Wireframe Prototype</h1>
+    <p>Click through the flow below. Each screen has design notes on the right explaining the accessibility reasoning for this audience.</p>
+  </div>
+</header>
+
+<div class="pillbar" id="pillbar"></div>
+
+<div class="stage">
+  <div class="phone-wrap">
+    <div class="phone">
+
+      <!-- TITLE -->
+      <div class="screen active" id="screen-title">
+        <div class="notch"></div>
+        <div class="screen-body" style="justify-content:center;">
+          <svg width="120" height="150" viewBox="0 0 100 130" aria-hidden="true" focusable="false" style="display:block; margin:0 auto 8px;">
+            <line x1="50" y1="70" x2="50" y2="118" stroke="#6B7A4F" stroke-width="5" stroke-linecap="round"/>
+            <ellipse cx="36" cy="92" rx="13" ry="6" fill="#6B7A4F" transform="rotate(-28 36 92)"/>
+            <ellipse cx="64" cy="100" rx="13" ry="6" fill="#6B7A4F" transform="rotate(28 64 100)"/>
+            <ellipse cx="50" cy="28" rx="19" ry="13" fill="var(--carnation)" transform="rotate(0 50 46)"/>
+            <ellipse cx="50" cy="28" rx="19" ry="13" fill="var(--carnation)" transform="rotate(45 50 46)"/>
+            <ellipse cx="50" cy="28" rx="19" ry="13" fill="var(--carnation)" transform="rotate(90 50 46)"/>
+            <ellipse cx="50" cy="28" rx="19" ry="13" fill="var(--carnation)" transform="rotate(135 50 46)"/>
+            <ellipse cx="50" cy="28" rx="19" ry="13" fill="var(--carnation)" transform="rotate(180 50 46)"/>
+            <ellipse cx="50" cy="28" rx="19" ry="13" fill="var(--carnation)" transform="rotate(225 50 46)"/>
+            <ellipse cx="50" cy="28" rx="19" ry="13" fill="var(--carnation)" transform="rotate(270 50 46)"/>
+            <ellipse cx="50" cy="28" rx="19" ry="13" fill="var(--carnation)" transform="rotate(315 50 46)"/>
+            <ellipse cx="50" cy="34" rx="14" ry="9" fill="var(--carnation-dark)" transform="rotate(15 50 46)"/>
+            <ellipse cx="50" cy="34" rx="14" ry="9" fill="var(--carnation-dark)" transform="rotate(75 50 46)"/>
+            <ellipse cx="50" cy="34" rx="14" ry="9" fill="var(--carnation-dark)" transform="rotate(135 50 46)"/>
+            <ellipse cx="50" cy="34" rx="14" ry="9" fill="var(--carnation-dark)" transform="rotate(195 50 46)"/>
+            <ellipse cx="50" cy="34" rx="14" ry="9" fill="var(--carnation-dark)" transform="rotate(255 50 46)"/>
+            <ellipse cx="50" cy="34" rx="14" ry="9" fill="var(--carnation-dark)" transform="rotate(315 50 46)"/>
+            <circle cx="50" cy="46" r="8" fill="var(--gold)"/>
+          </svg>
+          <h2 class="title" style="text-align:center; font-size:34px; color:var(--primary-dark);">Orphia</h2>
+          <p class="sub" style="text-align:center; margin-bottom:40px;">Music from your memories</p>
+          <button class="btn btn-primary" onclick="go('login')">Log In</button>
+          <button class="btn btn-secondary" onclick="go('signup1')">Sign Up</button>
+        </div>
+      </div>
+
+      <!-- SIGN UP 1 -->
+      <div class="screen" id="screen-signup1">
+        <div class="notch"></div>
+        <div class="screen-body">
+          <p class="sub" style="margin-bottom:4px;">Step 1 of 3</p>
+          <h2 class="title">What's your name?</h2>
+          <label>Your First Name</label>
+          <input type="text" placeholder="Type here" value="Dorothy">
+          <label>Create a PIN</label>
+          <div class="dots" id="pinDots1">
+            <div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div>
+          </div>
+          <div class="pinpad" id="pinpad1"></div>
+          <button class="btn btn-primary" style="margin-top:10px;" onclick="go('signup2')">Continue</button>
+        </div>
+      </div>
+
+      <!-- SIGN UP 2 -->
+      <div class="screen" id="screen-signup2">
+        <div class="notch"></div>
+        <div class="screen-body">
+          <p class="sub" style="margin-bottom:4px;">Step 2 of 3</p>
+          <h2 class="title">What year were you born?</h2>
+          <label>Birth Year</label>
+          <input type="text" inputmode="numeric" placeholder="e.g. 1948" style="text-align:center; font-size:32px; font-weight:700; color:var(--primary-dark); padding:20px;">
+          <button class="btn btn-primary" onclick="go('signup3')">Continue</button>
+          <button class="btn btn-ghost" onclick="go('signup1')">Back</button>
+        </div>
+      </div>
+
+      <!-- SIGN UP 3 -->
+      <div class="screen" id="screen-signup3">
+        <div class="notch"></div>
+        <div class="screen-body">
+          <p class="sub" style="margin-bottom:4px;">Step 3 of 3</p>
+          <h2 class="title" style="margin-bottom:2px;">Pick your favorite music</h2>
+          <p class="sub" id="genreCounter">Choose up to 4</p>
+          <div class="genre-list" id="genreList">
+            <div class="genre-card" onclick="toggleGenre(this)">Classical<span class="check"></span></div>
+            <div class="genre-card" onclick="toggleGenre(this)">Jazz &amp; Blues<span class="check"></span></div>
+            <div class="genre-card" onclick="toggleGenre(this)">Oldies &amp; Rock &rsquo;n&rsquo; Roll<span class="check"></span></div>
+            <div class="genre-card" onclick="toggleGenre(this)">Pop<span class="check"></span></div>
+            <div class="genre-card" onclick="toggleGenre(this)">Country &amp; Folk<span class="check"></span></div>
+            <div class="genre-card" onclick="toggleGenre(this)">Gospel &amp; Hymns<span class="check"></span></div>
+            <div class="genre-card" onclick="toggleGenre(this)">Broadway &amp; Musical Theater<span class="check"></span></div>
+            <div class="genre-card" onclick="toggleGenre(this)">Big Band &amp; Swing<span class="check"></span></div>
+            <div class="genre-card" onclick="toggleGenre(this)">R&amp;B &amp; Soul<span class="check"></span></div>
+          </div>
+          <button class="btn btn-primary" onclick="go('home')">Finish</button>
+        </div>
+      </div>
+
+      <!-- LOGIN -->
+      <div class="screen" id="screen-login">
+        <div class="notch"></div>
+        <div class="screen-body">
+          <h2 class="title">Welcome back</h2>
+          <label>Your First Name</label>
+          <input type="text" placeholder="Type here" value="Dorothy">
+          <label>Enter your PIN</label>
+          <div class="dots" id="pinDots2">
+            <div class="dot filled"></div><div class="dot filled"></div><div class="dot filled"></div><div class="dot filled"></div>
+          </div>
+          <div class="pinpad" id="pinpad2"></div>
+          <button class="btn btn-primary" style="margin-top:10px;" onclick="go('home')">Log In</button>
+        </div>
+      </div>
+
+      <!-- HOME -->
+      <div class="screen" id="screen-home">
+        <div class="notch"></div>
+        <div class="topbar">
+          <div></div>
+          <div class="profile" onclick="go('login')">D</div>
+        </div>
+        <div class="screen-body" style="padding-top:10px;">
+          <div class="welcome">Welcome, Dorothy</div>
+          <div class="continue-card" onclick="playSong('y3KJ7d2qBoA','My Girl','The Temptations','R&amp;B &amp; Soul · 1965')">
+            <div class="art" style="background-image:url('https://img.youtube.com/vi/y3KJ7d2qBoA/mqdefault.jpg')"></div>
+            <div class="txt">Continue listening<b>My Girl — The Temptations</b></div>
+          </div>
+          <button class="btn btn-primary" onclick="go('browse')">▶ Play Music</button>
+          <button class="btn btn-secondary" onclick="playSong('A134hShx_gw','Respect','Aretha Franklin','R&amp;B &amp; Soul · 1967')">♥ Play Favorites</button>
+          <button class="btn btn-secondary" onclick="go('memories')">🎧 My Memories</button>
+        </div>
+      </div>
+
+      <!-- BROWSE -->
+      <div class="screen" id="screen-browse">
+        <div class="notch"></div>
+        <div class="topbar">
+          <div class="back" onclick="go('home')">←</div>
+          <div></div>
+        </div>
+        <div class="screen-body" style="padding-top:10px;">
+          <h2 class="title" style="margin-bottom:0;">Choose a Song</h2>
+          <p class="sub" style="margin-top:4px;">Picked for your decade — tap any song to play it.</p>
+
+          <div class="decade-label">Classical</div>
+          <div class="song-row" onclick="playSong('2xSpGxAMGKs','Moonlight Sonata','Ludwig van Beethoven','Classical · 1801')">
+            <div class="art" style="background-image:url('https://img.youtube.com/vi/2xSpGxAMGKs/mqdefault.jpg')"></div>
+            <div class="meta"><b>Moonlight Sonata</b><span>Ludwig van Beethoven</span></div>
+          </div>
+          <div class="song-row" onclick="playSong('c977QdbTImU','Clair de Lune','Claude Debussy','Classical · c. 1890')">
+            <div class="art" style="background-image:url('https://img.youtube.com/vi/c977QdbTImU/mqdefault.jpg')"></div>
+            <div class="meta"><b>Clair de Lune</b><span>Claude Debussy</span></div>
+          </div>
+
+          <div class="decade-label">Jazz &amp; Blues</div>
+          <div class="song-row" onclick="playSong('-DHuW1h1wHw','Take Five','Dave Brubeck Quartet','Jazz &amp; Blues · 1959')">
+            <div class="art" style="background-image:url('https://img.youtube.com/vi/-DHuW1h1wHw/mqdefault.jpg')"></div>
+            <div class="meta"><b>Take Five</b><span>Dave Brubeck Quartet</span></div>
+          </div>
+          <div class="song-row" onclick="playSong('76gsMX5Pqc4','Georgia on My Mind','Ray Charles','Jazz &amp; Blues · 1960')">
+            <div class="art" style="background-image:url('https://img.youtube.com/vi/76gsMX5Pqc4/mqdefault.jpg')"></div>
+            <div class="meta"><b>Georgia on My Mind</b><span>Ray Charles</span></div>
+          </div>
+
+          <div class="decade-label">Oldies &amp; Rock 'n' Roll</div>
+          <div class="song-row" onclick="playSong('O-aavAlSYgc','Can&#39;t Help Falling in Love','Elvis Presley','Oldies &amp; Rock &#39;n&#39; Roll · 1961')">
+            <div class="art" style="background-image:url('https://img.youtube.com/vi/O-aavAlSYgc/mqdefault.jpg')"></div>
+            <div class="meta"><b>Can't Help Falling in Love</b><span>Elvis Presley</span></div>
+          </div>
+          <div class="song-row" onclick="playSong('blt-Jtk25iQ','I Want to Hold Your Hand','The Beatles','Oldies &amp; Rock &#39;n&#39; Roll · 1963')">
+            <div class="art" style="background-image:url('https://img.youtube.com/vi/blt-Jtk25iQ/mqdefault.jpg')"></div>
+            <div class="meta"><b>I Want to Hold Your Hand</b><span>The Beatles</span></div>
+          </div>
+
+          <div class="decade-label">Pop</div>
+          <div class="song-row" onclick="playSong('Y5D1_aJB4Dw','Sweet Caroline','Neil Diamond','Pop · 1969')">
+            <div class="art" style="background-image:url('https://img.youtube.com/vi/Y5D1_aJB4Dw/mqdefault.jpg')"></div>
+            <div class="meta"><b>Sweet Caroline</b><span>Neil Diamond</span></div>
+          </div>
+          <div class="song-row" onclick="playSong('h0n-mYqB9WQ','Bridge over Troubled Water','Simon &amp; Garfunkel','Pop · 1970')">
+            <div class="art" style="background-image:url('https://img.youtube.com/vi/h0n-mYqB9WQ/mqdefault.jpg')"></div>
+            <div class="meta"><b>Bridge over Troubled Water</b><span>Simon &amp; Garfunkel</span></div>
+          </div>
+
+          <div class="decade-label">Country &amp; Folk</div>
+          <div class="song-row" onclick="playSong('M3yWXXGncBU','Crazy','Patsy Cline','Country &amp; Folk · 1961')">
+            <div class="art" style="background-image:url('https://img.youtube.com/vi/M3yWXXGncBU/mqdefault.jpg')"></div>
+            <div class="meta"><b>Crazy</b><span>Patsy Cline</span></div>
+          </div>
+          <div class="song-row" onclick="playSong('H48SgS098pM','Ring of Fire','Johnny Cash','Country &amp; Folk · 1963')">
+            <div class="art" style="background-image:url('https://img.youtube.com/vi/H48SgS098pM/mqdefault.jpg')"></div>
+            <div class="meta"><b>Ring of Fire</b><span>Johnny Cash</span></div>
+          </div>
+
+          <div class="decade-label">Gospel &amp; Hymns</div>
+          <div class="song-row" onclick="playSong('E3McBWuZiuE','Amazing Grace','Judy Collins','Gospel &amp; Hymns · 1970')">
+            <div class="art" style="background-image:url('https://img.youtube.com/vi/E3McBWuZiuE/mqdefault.jpg')"></div>
+            <div class="meta"><b>Amazing Grace</b><span>Judy Collins</span></div>
+          </div>
+          <div class="song-row" onclick="playSong('RS8hduL63cQ','Oh Happy Day','The Edwin Hawkins Singers','Gospel &amp; Hymns · 1968')">
+            <div class="art" style="background-image:url('https://img.youtube.com/vi/RS8hduL63cQ/mqdefault.jpg')"></div>
+            <div class="meta"><b>Oh Happy Day</b><span>The Edwin Hawkins Singers</span></div>
+          </div>
+
+          <div class="decade-label">Broadway &amp; Musical Theater</div>
+          <div class="song-row" onclick="playSong('n6z7UnUmXug','Somewhere (West Side Story)','Leonard Bernstein / Stephen Sondheim','Broadway &amp; Musical Theater · 1961')">
+            <div class="art" style="background-image:url('https://img.youtube.com/vi/n6z7UnUmXug/mqdefault.jpg')"></div>
+            <div class="meta"><b>Somewhere</b><span>West Side Story</span></div>
+          </div>
+          <div class="song-row" onclick="playSong('HBELgNLzLYw','Hello, Dolly!','Jerry Herman','Broadway &amp; Musical Theater · 1964')">
+            <div class="art" style="background-image:url('https://img.youtube.com/vi/HBELgNLzLYw/mqdefault.jpg')"></div>
+            <div class="meta"><b>Hello, Dolly!</b><span>Jerry Herman</span></div>
+          </div>
+
+          <div class="decade-label">Big Band &amp; Swing</div>
+          <div class="song-row" onclick="playSong('aME0qvhZ37o','In the Mood','Glenn Miller Orchestra','Big Band &amp; Swing · 1939')">
+            <div class="art" style="background-image:url('https://img.youtube.com/vi/aME0qvhZ37o/mqdefault.jpg')"></div>
+            <div class="meta"><b>In the Mood</b><span>Glenn Miller Orchestra</span></div>
+          </div>
+          <div class="song-row" onclick="playSong('9Ws6DdrDtyo','Moonlight Serenade','Glenn Miller Orchestra','Big Band &amp; Swing · 1939')">
+            <div class="art" style="background-image:url('https://img.youtube.com/vi/9Ws6DdrDtyo/mqdefault.jpg')"></div>
+            <div class="meta"><b>Moonlight Serenade</b><span>Glenn Miller Orchestra</span></div>
+          </div>
+
+          <div class="decade-label">R&amp;B &amp; Soul</div>
+          <div class="song-row" onclick="playSong('y3KJ7d2qBoA','My Girl','The Temptations','R&amp;B &amp; Soul · 1965')">
+            <div class="art" style="background-image:url('https://img.youtube.com/vi/y3KJ7d2qBoA/mqdefault.jpg')"></div>
+            <div class="meta"><b>My Girl</b><span>The Temptations</span></div>
+          </div>
+          <div class="song-row" onclick="playSong('A134hShx_gw','Respect','Aretha Franklin','R&amp;B &amp; Soul · 1967')">
+            <div class="art" style="background-image:url('https://img.youtube.com/vi/A134hShx_gw/mqdefault.jpg')"></div>
+            <div class="meta"><b>Respect</b><span>Aretha Franklin</span></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- PLAYING -->
+      <div class="screen" id="screen-playing">
+        <div class="notch"></div>
+        <div class="topbar">
+          <div class="back" onclick="go('browse')">←</div>
+          <div></div>
+        </div>
+        <div class="screen-body" style="padding-top:8px;">
+          <div class="yt-wrap" id="ytWrap">
+            <iframe id="ytFrame" src="https://www.youtube.com/embed/y3KJ7d2qBoA?rel=0" title="YouTube video player" allow="autoplay; encrypted-media; picture-in-picture" allowfullscreen></iframe>
+          </div>
+          <div class="song-title" id="songTitle">My Girl</div>
+          <div class="song-artist" id="songArtist">The Temptations</div>
+          <div class="song-genre" id="songGenre">R&amp;B &amp; Soul · 1965</div>
+          <div class="lyrics">
+            <div class="dim">♪ lyric line — plays before the current line</div>
+            <div class="current">♪ current lyric line — highlighted in sync with playback</div>
+            <div class="dim">♪ lyric line — plays after the current line</div>
+          </div>
+          <div class="controls">
+            <div class="ctrl-btn" onclick="toggleCtrl(this)">👎</div>
+            <div class="ctrl-btn" id="heartBtn" onclick="toggleCtrl(this)">♥</div>
+            <div class="ctrl-btn">⏮</div>
+            <div class="ctrl-btn play">⏸</div>
+            <div class="ctrl-btn">⏭</div>
+          </div>
+          <button class="btn btn-secondary" onclick="go('memory')">💬 Share a Memory</button>
+        </div>
+      </div>
+
+      <!-- MEMORY -->
+      <div class="screen" id="screen-memory">
+        <div class="notch"></div>
+        <div class="topbar">
+          <div class="back" onclick="go('playing')">←</div>
+          <div></div>
+        </div>
+        <div class="screen-body" style="padding-top:10px; text-align:center;">
+          <h2 class="title">Does this song remind you of anything?</h2>
+          <p class="sub">Tap the button and tell us. Just you — no one else will hear this unless you choose to share it later.</p>
+          <button class="record-btn" id="recordBtn" onclick="toggleRecord()">●</button>
+          <div class="timer" id="recordTimer">Tap to record</div>
+          <button class="btn btn-primary" onclick="go('playing')">Save Memory</button>
+          <button class="btn btn-ghost" onclick="go('playing')">Discard</button>
+        </div>
+      </div>
+
+      <!-- MEMORIES LIBRARY -->
+      <div class="screen" id="screen-memories">
+        <div class="notch"></div>
+        <div class="topbar">
+          <div class="back" onclick="go('home')">←</div>
+          <div></div>
+        </div>
+        <div class="screen-body" style="padding-top:10px;">
+          <h2 class="title" style="margin-bottom:4px;">My Memories</h2>
+          <p class="sub">Tap ▶ to listen back. Tap a memory to jump to its song.</p>
+          <div class="memory-list">
+            <div class="memory-card" onclick="playSong('y3KJ7d2qBoA','My Girl','The Temptations','R&amp;B &amp; Soul · 1965')">
+              <div class="art" style="background-image:url('https://img.youtube.com/vi/y3KJ7d2qBoA/mqdefault.jpg')"></div>
+              <div class="meta"><b>My Girl</b><span>The Temptations · Oct 12</span></div>
+              <button class="memory-play" onclick="event.stopPropagation(); toggleMemoryPlay(this)">▶</button>
+            </div>
+            <div class="memory-card" onclick="playSong('c977QdbTImU','Clair de Lune','Claude Debussy','Classical · c. 1890')">
+              <div class="art" style="background-image:url('https://img.youtube.com/vi/c977QdbTImU/mqdefault.jpg')"></div>
+              <div class="meta"><b>Clair de Lune</b><span>Claude Debussy · Oct 9</span></div>
+              <button class="memory-play" onclick="event.stopPropagation(); toggleMemoryPlay(this)">▶</button>
+            </div>
+            <div class="memory-card" onclick="playSong('E3McBWuZiuE','Amazing Grace','Judy Collins','Gospel &amp; Hymns · 1970')">
+              <div class="art" style="background-image:url('https://img.youtube.com/vi/E3McBWuZiuE/mqdefault.jpg')"></div>
+              <div class="meta"><b>Amazing Grace</b><span>Judy Collins · Oct 3</span></div>
+              <button class="memory-play" onclick="event.stopPropagation(); toggleMemoryPlay(this)">▶</button>
+            </div>
+          </div>
+          <div class="memory-empty-hint">That's every memory you've shared so far.</div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <div class="notes" id="notes"></div>
+</div>
+
+<footer>Orphia MVP · wireframe prototype for design review — not a functional app</footer>
+
+<script>
+const order = ['title','signup1','signup2','signup3','login','home','browse','playing','memory','memories'];
+const labels = {
+  title:'Title', signup1:'Sign Up 1', signup2:'Sign Up 2', signup3:'Sign Up 3',
+  login:'Log In', home:'Home', browse:'Browse', playing:'Song Playing', memory:'Memory Capture', memories:'My Memories'
+};
+
+const notesContent = {
+  title: {
+    tag:'Entry point', title:'Title Screen',
+    body:'First thing a resident sees. Only two choices, nothing else competing for attention.',
+    points:[
+      'Large wordmark, high contrast, no decorative clutter.',
+      'Two primary actions only — Log In vs Sign Up is the entire decision.',
+      'No "forgot password" link yet — PIN recovery is a real MVP question, flagged for follow-up.'
+    ]
+  },
+  signup1: {
+    tag:'Changed from sketch', title:'Sign Up — Name &amp; PIN',
+    body:'Replaces the original username+passcode text fields. Since signup is self-service with no one to help, every typed field is a drop-off risk.',
+    points:[
+      'Dropped "username" as a separate concept — First Name + PIN is the full credential.',
+      'PIN pad instead of a text keyboard: easier to tap accurately than a QWERTY layout, no shift/caps confusion.',
+      'Dot indicator shows PIN length without ever displaying the digits.'
+    ]
+  },
+  signup2: {
+    tag:'Changed from sketch', title:'Sign Up — Birth Year',
+    body:'Replaces the full DOB field from the original sketch.',
+    points:[
+      'Only birth year is needed to infer "songs from their youth" — day/month adds typing for no payoff.',
+      'A single large, centered numeric field keeps the input direct — numeric keypad on mobile, big readable digits.'
+    ]
+  },
+  signup3: {
+    tag:'Changed from sketch', title:'Sign Up — Favorite Genres',
+    body:'Replaces the dense 3×3 icon grid from the original sketch, now with a wider genre list capped at 4 selections.',
+    points:[
+      'Single-column list of large cards instead of 9 small adjacent tap targets — the #1 mis-tap risk for users with tremor or low dexterity.',
+      'Selected state is a full card color change + checkmark, not just a thin border — visible at low vision.',
+      'Capped at 4 picks: once reached, unselected cards dim and further taps are ignored until one is deselected — keeps the personalization signal focused rather than "select everything."',
+      'Live counter text ("Choose up to 4 / Maximum of 4 selected") gives feedback without needing a popup or error state.'
+    ]
+  },
+  login: {
+    tag:'Changed from sketch', title:'Log In',
+    body:'Mirrors the Sign Up credential pattern for consistency — same PIN pad, same mental model.',
+    points:[
+      'Reuses the exact input pattern from signup so there is nothing new to learn.',
+      'Open question: how does a resident recover a forgotten PIN with no self-service "reset by email" assumption? Needs a decision before build.'
+    ]
+  },
+  home: {
+    tag:'Mostly kept from sketch', title:'Home',
+    body:'Core structure kept from your original sketch — welcome message plus big, clearly separated actions.',
+    points:[
+      'Added a "Continue listening" card so a returning user doesn\'t have to re-browse the library every time — now pulls a real song from the curated library and plays its actual YouTube video when tapped, same as Browse and Play Favorites.',
+      'Top-right circle is the profile/account icon per your clarification — settings, account info, sign out.',
+      'Added a third button, "My Memories" — until now the only way to reach a saved memory was mid-playback via "Share a Memory," with no way to revisit what you\'d already recorded. Since reflection is the core differentiator, it needs its own front-door from Home, not just a side-effect of playing a song.',
+      'Kept it as a secondary (outlined) button, same tier as "Play Favorites," so "Play Music" still reads as the one dominant action on first glance.'
+    ]
+  },
+  browse: {
+    tag:'Updated with real data', title:'Browse Library',
+    body:'Did not exist in the original sketches — this is what "Play Music" actually opens into. Now pulls from the real curated library (design/song-library-by-age-decade.csv), filtered to Dorothy\'s formative-listening era, instead of four placeholder songs.',
+    points:[
+      'Grouped by genre (matching the Sign Up genre picker) instead of release decade — ties straight back to what the resident said they like, and the catalog is organized by genre in the source data.',
+      'Each row is a real, licensed-for-embedding YouTube video — tapping it loads and autoplays that video on the Song Playing screen, so this screen is now genuinely functional, not just a mockup of taps.',
+      'Row art is the real YouTube thumbnail for that video instead of a flat color swatch — free realism from data already on hand.',
+      'Large row height (46px art + two lines of text) keeps tap targets generous in a scrolling list.',
+      'Only 18 of the 253 songs in the CSV are shown (2 per genre) — still "small and curated" per the MVP decision; the full dataset is there to pull from once there\'s a UI for genre filtering or decade browsing.'
+    ]
+  },
+  playing: {
+    tag:'Now functional', title:'Song Playing',
+    body:'Keeps your core layout — big artwork area, title, artist, lyrics, transport row — but the artwork area is now a real embedded YouTube player that plays the actual song.',
+    points:[
+      'Tapping any song (Browse, Continue Listening, Play Favorites, or a Memory) loads that video into the player and autoplays it — "directly play the YouTube video," as requested.',
+      'YouTube\'s official iframe embed is used (not a download/re-host), which is the standard, compliant way to include YouTube video in a third-party app — distinct from the "small licensed library" approach in the MVP scope decision, worth flagging as a deliberate scope change, not an oversight.',
+      'Added a genre/year line under the artist since the source data has it and it reinforces "this is from your era."',
+      'Controls confirmed as thumbs-down / favorite / prev / pause / next — a like/dislike feedback pair, not shuffle. These stay as a custom overlay; actual playback control lives in the YouTube player itself for MVP, which also means lyric auto-scroll sync is not literally implemented here, just represented.',
+      'Lyrics shown are placeholder text, not real lyrics for whatever song is loaded — real synced lyrics would need a licensed lyrics source, a separate decision from the video itself.',
+      'Added an explicit, labeled "Share a Memory" button — this didn\'t exist anywhere in the original sketches, and it\'s your core differentiator.'
+    ]
+  },
+  memory: {
+    tag:'New screen', title:'Memory Capture',
+    body:'Did not exist in the original sketches. This is the screen for "reflect on memories connected to the music" from your pitch.',
+    points:[
+      'Voice-first, not text — typing is the main friction point everywhere else in the app, no reason to introduce it here.',
+      'Explicitly private for MVP (confirmed) — no sharing/permissions UI, keeping the build simple.',
+      'Architecture should still leave room to add sharing later without a rebuild, even though the UI for it isn\'t built now.'
+    ]
+  },
+  memories: {
+    tag:'New screen', title:'My Memories',
+    body:'New library screen, reachable from Home, that answers "where do my saved memories go?" — did not exist in the original sketches or the Con Brio iteration.',
+    points:[
+      'Every memory shows the song it\'s connected to (art, title, artist) alongside a dedicated round play button for the voice recording itself — the two playback actions are visually distinct so it\'s never ambiguous whether tapping plays the memory or the song.',
+      'Tapping the song info (not the play button) jumps to that song\'s Song Playing screen — lets a resident rediscover a song through a memory, not just a memory through a song.',
+      'Reuses the carnation-red accent from the Share/Favorite flow for the play button, so the color itself signals "this is part of your reflection history," consistent across the app.',
+      'List-based, not grid — same reasoning as Browse: large single-column rows are the safest tap target for this audience, and the MVP catalog of memories per resident will be small.',
+      'Still private-only per your earlier decision — no share icon on this screen yet, but each row already models a (memory ↔ song) pair, which is the data shape sharing would need later.'
+    ]
+  }
+};
+
+function renderPillbar(){
+  const bar = document.getElementById('pillbar');
+  bar.innerHTML = '';
+  order.forEach(id=>{
+    const p = document.createElement('div');
+    p.className = 'pill';
+    p.id = 'pill-'+id;
+    p.textContent = labels[id];
+    p.onclick = ()=>go(id);
+    bar.appendChild(p);
+  });
+}
+
+function go(id){
+  order.forEach(o=>{
+    document.getElementById('screen-'+o).classList.toggle('active', o===id);
+    document.getElementById('pill-'+o).classList.toggle('active', o===id);
+  });
+  const n = notesContent[id];
+  const notesEl = document.getElementById('notes');
+  notesEl.innerHTML = `
+    <span class="tag ${n.tag.startsWith('New')?'new':''}">${n.tag}</span>
+    <h2>${n.title}</h2>
+    <p>${n.body}</p>
+    <ul>${n.points.map(pt=>'<li>'+pt+'</li>').join('')}</ul>
+  `;
+}
+
+function playSong(youtubeId, title, artist, genreLine){
+  document.getElementById('songTitle').textContent = title;
+  document.getElementById('songArtist').textContent = artist;
+  document.getElementById('songGenre').innerHTML = genreLine;
+  document.getElementById('ytFrame').src =
+    'https://www.youtube.com/embed/' + youtubeId + '?autoplay=1&rel=0';
+  go('playing');
+}
+
+// PIN pad generation
+function buildPinpad(id){
+  const el = document.getElementById(id);
+  ['1','2','3','4','5','6','7','8','9','','0','⌫'].forEach(k=>{
+    const btn = document.createElement('div');
+    btn.className = 'pinkey';
+    btn.style.visibility = k===''?'hidden':'visible';
+    btn.textContent = k;
+    el.appendChild(btn);
+  });
+}
+buildPinpad('pinpad1');
+buildPinpad('pinpad2');
+
+const MAX_GENRES = 4;
+function toggleGenre(el){
+  const list = document.getElementById('genreList');
+  const selected = list.querySelectorAll('.genre-card.selected');
+  if(!el.classList.contains('selected') && selected.length >= MAX_GENRES){
+    return; // cap reached, ignore further taps
+  }
+  el.classList.toggle('selected');
+  const count = list.querySelectorAll('.genre-card.selected').length;
+  const counter = document.getElementById('genreCounter');
+  counter.textContent = count >= MAX_GENRES ? 'Maximum of 4 selected' : `Choose up to 4 (${count} selected)`;
+  list.querySelectorAll('.genre-card').forEach(card=>{
+    card.style.opacity = (count >= MAX_GENRES && !card.classList.contains('selected')) ? '0.45' : '1';
+  });
+}
+
+function toggleCtrl(el){ el.classList.toggle('active'); }
+
+function toggleMemoryPlay(btn){
+  const wasPlaying = btn.classList.contains('playing');
+  // stop any other memory that's currently "playing" in this list
+  document.querySelectorAll('.memory-play.playing').forEach(b=>{
+    b.classList.remove('playing'); b.textContent = '▶';
+  });
+  if(!wasPlaying){
+    btn.classList.add('playing');
+    btn.textContent = '⏸';
+  }
+}
+
+let recording = false, recorded = false, timerInt;
+function toggleRecord(){
+  const btn = document.getElementById('recordBtn');
+  const timer = document.getElementById('recordTimer');
+  if(!recording && !recorded){
+    recording = true;
+    btn.classList.add('recording');
+    btn.textContent = '■';
+    let t = 0;
+    timerInt = setInterval(()=>{ t++; timer.textContent = '0:'+String(t).padStart(2,'0'); }, 1000);
+  } else if(recording){
+    recording = false; recorded = true;
+    clearInterval(timerInt);
+    btn.classList.remove('recording');
+    btn.textContent = '▶';
+    timer.textContent = 'Recorded — tap to play back';
+  } else {
+    btn.textContent = '●'; recorded = false; timer.textContent = 'Tap to record';
+  }
+}
+
+renderPillbar();
+go('title');
+</script>
+
+</body>
+</html>

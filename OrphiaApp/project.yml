@@ -1,0 +1,39 @@
+name: Orphia
+options:
+  bundleIdPrefix: com.orphia
+  deploymentTarget:
+    iOS: "16.0"
+  createIntermediateGroups: true
+
+packages:
+  YouTubeiOSPlayerHelper:
+    url: https://github.com/youtube/youtube-ios-player-helper.git
+    from: 1.0.4
+
+targets:
+  Orphia:
+    type: application
+    platform: iOS
+    sources:
+      - path: Orphia
+    dependencies:
+      - package: YouTubeiOSPlayerHelper
+    info:
+      path: Orphia/Info.plist
+      properties:
+        CFBundleDisplayName: Orphia
+        UILaunchScreen: {}
+        NSMicrophoneUsageDescription: "Orphia records short voice memos so you can save a memory connected to a song. Recordings stay on your device and are never shared automatically."
+        UIApplicationSceneManifest:
+          UIApplicationSupportsMultipleScenes: false
+        UISupportedInterfaceOrientations:
+          - UIInterfaceOrientationPortrait
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.orphia.app
+        ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
+        ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME: AccentColor
+        SWIFT_VERSION: "5.0"
+        TARGETED_DEVICE_FAMILY: "1"
+        DEVELOPMENT_TEAM: ""
+        CODE_SIGN_STYLE: Automatic

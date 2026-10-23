@@ -1,0 +1,20 @@
+# macOS
+.DS_Store
+
+# Xcode per-user state and build output
+xcuserdata/
+DerivedData/
+build/
+*.xcuserstate
+
+# Swift Package Manager
+.build/
+.swiftpm/
+
+# Claude Code local (per-machine) settings
+.claude/settings.local.json
+
+# Secrets (e.g. future Supabase config)
+.env
+*.env
+Secrets.xcconfig
