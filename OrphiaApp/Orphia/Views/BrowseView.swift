@@ -1,9 +1,11 @@
 import SwiftUI
 
 /// Did not exist in the original sketches — this is what "Play Music" opens into.
-/// Pulls from the real curated library (18 songs, 2 per genre), grouped by genre to
-/// match the Sign Up genre picker. Each row is a real YouTube video; tapping it loads
-/// and autoplays that video on the Song Playing screen.
+/// Pulls the FULL set of songs the CSV has for the resident's age bracket —
+/// every song in every genre for that bracket (10 for Classical, 4 for every
+/// other genre), not a hand-picked sample — grouped by genre, with genres the
+/// resident picked at Sign Up surfaced first. Each row is a real YouTube
+/// video; tapping it loads and autoplays that video on the Song Playing screen.
 struct BrowseView: View {
     @Binding var path: [Route]
     @EnvironmentObject var appState: AppState
@@ -19,7 +21,7 @@ struct BrowseView: View {
                     .foregroundColor(AppColors.muted)
                     .padding(.bottom, 8)
 
-                ForEach(SongLibrary.byGenre, id: \.genre) { group in
+                ForEach(appState.librarySections, id: \.genre) { group in
                     Text(group.genre.rawValue.uppercased())
                         .font(.system(size: 14, weight: .bold))
                         .foregroundColor(AppColors.muted)

@@ -9,11 +9,14 @@
 /* Begin PBXBuildFile section */
 		28626FA79DF98761C040164B /* SignUpGenresView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58FDE6D7B658DA9D7D234409 /* SignUpGenresView.swift */; };
 		28C98ACAFB3522FEDD8B8BD0 /* CarnationLogo.swift in Sources */ = {isa = PBXBuildFile; fileRef = F5B072BF375ACB88BD27529A /* CarnationLogo.swift */; };
+		2B1B9BFF3342DA8C210D4AE7 /* AgeBracket.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6FB61696B0C361D05D6F63C6 /* AgeBracket.swift */; };
 		3346A4225D2CD5069523A615 /* SignUpBirthYearView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 66E81FCE9C3A71A42708549E /* SignUpBirthYearView.swift */; };
 		4527C3C684454481829ECD7C /* PinPadView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 35543CF83DFFC6DF8E40908D /* PinPadView.swift */; };
+		465398F43DE63BF8C5911F7D /* SongCatalogData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1984BB5F4828A439C1D44B17 /* SongCatalogData.swift */; };
 		4F789E8D499F2A21E77F55EC /* TitleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA50181CB16F79112A094F66 /* TitleView.swift */; };
 		6FB0341410DD46AF98D05056 /* RootView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BE0BFE181C31B6F4C097D2A /* RootView.swift */; };
 		76E301C42FAEDCDBC1B7FEAE /* SignUpNameView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 90B18A6E0AAEA8AB0A3089E2 /* SignUpNameView.swift */; };
+		79F56140FFB38CD2C2F18E68 /* SongCatalog.swift in Sources */ = {isa = PBXBuildFile; fileRef = A4A131E7B3639A4021067B1F /* SongCatalog.swift */; };
 		79F6E8E1C93FBD806A200160 /* OrphiaApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9097B83D0CA5BB948A72A75C /* OrphiaApp.swift */; };
 		9B92F98F7A5A019FC9B0029C /* AppColors.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB391039AB05209B73D21958 /* AppColors.swift */; };
 		A3B4B79FD77FF9EEBF41C116 /* YouTubeiOSPlayerHelper in Frameworks */ = {isa = PBXBuildFile; productRef = 1D1DCB15BE52518C8A9091AB /* YouTubeiOSPlayerHelper */; };
@@ -36,6 +39,7 @@
 		03FA6AD9C8ADD523C1F42AE1 /* AudioPlaybackManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudioPlaybackManager.swift; sourceTree = "<group>"; };
 		0618DD8BC37BA6F000B12E23 /* MemoryCaptureView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MemoryCaptureView.swift; sourceTree = "<group>"; };
 		07A74D9246408F7693748B41 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
+		1984BB5F4828A439C1D44B17 /* SongCatalogData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SongCatalogData.swift; sourceTree = "<group>"; };
 		1BE0BFE181C31B6F4C097D2A /* RootView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RootView.swift; sourceTree = "<group>"; };
 		1FAD1139F303EFA1FFD65D9E /* Orphia.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = Orphia.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		281A3469F57132CCAA20F09B /* MyMemoriesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyMemoriesView.swift; sourceTree = "<group>"; };
@@ -47,11 +51,13 @@
 		58FDE6D7B658DA9D7D234409 /* SignUpGenresView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignUpGenresView.swift; sourceTree = "<group>"; };
 		65EB052238EC1ACC7C7FD1FE /* YouTubePlayerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = YouTubePlayerView.swift; sourceTree = "<group>"; };
 		66E81FCE9C3A71A42708549E /* SignUpBirthYearView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignUpBirthYearView.swift; sourceTree = "<group>"; };
+		6FB61696B0C361D05D6F63C6 /* AgeBracket.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AgeBracket.swift; sourceTree = "<group>"; };
 		75E50C228C628300CEFE6FA2 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		8C08D61249E52295D5B25DB3 /* SongPlayingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SongPlayingView.swift; sourceTree = "<group>"; };
 		9097B83D0CA5BB948A72A75C /* OrphiaApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrphiaApp.swift; sourceTree = "<group>"; };
 		90B18A6E0AAEA8AB0A3089E2 /* SignUpNameView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignUpNameView.swift; sourceTree = "<group>"; };
 		9FBF32C1197F66DE7648BA45 /* AppState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppState.swift; sourceTree = "<group>"; };
+		A4A131E7B3639A4021067B1F /* SongCatalog.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SongCatalog.swift; sourceTree = "<group>"; };
 		AA50181CB16F79112A094F66 /* TitleView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TitleView.swift; sourceTree = "<group>"; };
 		B18366317872D6DBA81EBEE4 /* AudioRecorderManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudioRecorderManager.swift; sourceTree = "<group>"; };
 		B9B894613069227926B649DC /* BrowseView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BrowseView.swift; sourceTree = "<group>"; };
@@ -109,7 +115,10 @@
 		8587DD93FB26D00D940F1A5D /* Models */ = {
 			isa = PBXGroup;
 			children = (
+				6FB61696B0C361D05D6F63C6 /* AgeBracket.swift */,
 				5308D71678BC090B3498BAC4 /* Models.swift */,
+				A4A131E7B3639A4021067B1F /* SongCatalog.swift */,
+				1984BB5F4828A439C1D44B17 /* SongCatalogData.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -233,6 +242,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				2B1B9BFF3342DA8C210D4AE7 /* AgeBracket.swift in Sources */,
 				9B92F98F7A5A019FC9B0029C /* AppColors.swift in Sources */,
 				D8862E6EF4C0368ABD527239 /* AppState.swift in Sources */,
 				ECE81974629D4978CD412C0A /* AudioPlaybackManager.swift in Sources */,
@@ -251,6 +261,8 @@
 				3346A4225D2CD5069523A615 /* SignUpBirthYearView.swift in Sources */,
 				28626FA79DF98761C040164B /* SignUpGenresView.swift in Sources */,
 				76E301C42FAEDCDBC1B7FEAE /* SignUpNameView.swift in Sources */,
+				79F56140FFB38CD2C2F18E68 /* SongCatalog.swift in Sources */,
+				465398F43DE63BF8C5911F7D /* SongCatalogData.swift in Sources */,
 				B36EE120108ACBDC122C2881 /* SongPlayingView.swift in Sources */,
 				4F789E8D499F2A21E77F55EC /* TitleView.swift in Sources */,
 				D654CCBD807C5709264161CD /* YouTubePlayerView.swift in Sources */,

@@ -1,15 +1,17 @@
 import SwiftUI
 
 /// Core structure kept from the original sketch: welcome message plus big,
-/// clearly separated actions. "Continue listening" pulls a real song from the
-/// curated library; "My Memories" gives reflection its own front-door from Home
-/// instead of only being reachable mid-playback.
+/// clearly separated actions. "Continue listening" and "Play Favorites" pull
+/// real songs personalized to the resident's age bracket (and, when set,
+/// their selected genres) from `AppState.librarySections` — not a fixed pair.
+/// "My Memories" gives reflection its own front-door from Home instead of
+/// only being reachable mid-playback.
 struct HomeView: View {
     @Binding var path: [Route]
     @EnvironmentObject var appState: AppState
 
-    private let continueSong = SongLibrary.defaultSong
-    private let favoriteSong = SongLibrary.favoriteSong
+    private var continueSong: Song { appState.defaultSong }
+    private var favoriteSong: Song { appState.favoriteSong }
 
     var body: some View {
         ScrollView {

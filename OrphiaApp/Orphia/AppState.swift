@@ -24,19 +24,59 @@ final class AppState: ObservableObject {
     @Published var selectedGenres: Set<Genre> = []
 
     // Now-playing state.
-    @Published var currentSong: Song = SongLibrary.defaultSong
+    @Published var currentSong: Song = SongCatalog.fallbackSong(for: .seventies)
     @Published var thumbsDown: Bool = false
     @Published var isFavorite: Bool = false
 
     // Saved voice-memo reflections. Seeded with a few demo entries so
     // "My Memories" isn't empty on first run, matching the wireframe.
     @Published var memories: [Memory] = [
-        Memory(id: UUID(), song: SongLibrary.song(id: "y3KJ7d2qBoA")!, dateLabel: "Oct 12", audioFileName: ""),
-        Memory(id: UUID(), song: SongLibrary.song(id: "c977QdbTImU")!, dateLabel: "Oct 9", audioFileName: ""),
-        Memory(id: UUID(), song: SongLibrary.song(id: "E3McBWuZiuE")!, dateLabel: "Oct 3", audioFileName: ""),
+        Memory(id: UUID(), song: SongCatalog.song(id: "y3KJ7d2qBoA")!, dateLabel: "Oct 12", audioFileName: ""),
+        Memory(id: UUID(), song: SongCatalog.song(id: "c977QdbTImU")!, dateLabel: "Oct 9", audioFileName: ""),
+        Memory(id: UUID(), song: SongCatalog.song(id: "E3McBWuZiuE")!, dateLabel: "Oct 3", audioFileName: ""),
     ]
 
     static let maxGenres = 4
+
+    /// The resident's current age bracket, computed from birth year — falls
+    /// back to "70s" (matching the Dorothy demo persona) before a birth year
+    /// has been entered or if it's unparseable.
+    var ageBracket: AgeBracket {
+        guard let year = Int(birthYear) else { return .seventies }
+        return AgeBracket.current(birthYear: year)
+    }
+
+    /// Genres the resident picked at Sign Up come first, so their favorites
+    /// surface at the top of Browse — but every genre is still included, since
+    /// the point is to show the full personalized catalog, not just a sliver of it.
+    var genreOrder: [Genre] {
+        let selected = Genre.allCases.filter { selectedGenres.contains($0) }
+        let rest = Genre.allCases.filter { !selectedGenres.contains($0) }
+        return selected + rest
+    }
+
+    /// Every song the CSV has for this resident's bracket, grouped by genre —
+    /// personalized to genre (selection order) and decade (age bracket), and
+    /// never trimmed to a sample: a genre with 4 or 10 songs in the dataset
+    /// shows all 4 or all 10, not just one or two.
+    var librarySections: [(genre: Genre, songs: [Song])] {
+        SongCatalog.sections(for: ageBracket, genreOrder: genreOrder)
+    }
+
+    var defaultSong: Song {
+        librarySections.first?.songs.first ?? SongCatalog.fallbackSong(for: ageBracket)
+    }
+
+    var favoriteSong: Song {
+        let sections = librarySections
+        if let first = sections.first, first.songs.count > 1 {
+            return first.songs[1]
+        }
+        if sections.count > 1, let secondGenreSong = sections[1].songs.first {
+            return secondGenreSong
+        }
+        return SongCatalog.fallbackSong(for: ageBracket)
+    }
 
     func toggleGenre(_ genre: Genre) {
         if selectedGenres.contains(genre) {
