@@ -46,19 +46,18 @@ final class AppState: ObservableObject {
         return AgeBracket.current(birthYear: year)
     }
 
-    /// Genres the resident picked at Sign Up come first, so their favorites
-    /// surface at the top of Browse — but every genre is still included, since
-    /// the point is to show the full personalized catalog, not just a sliver of it.
+    /// Browse/Home are filtered down to just the genres the resident picked at
+    /// Sign Up (their genre preference) — not all 9. Falls back to every genre
+    /// only if they haven't picked any yet (e.g. mid-signup), so the library is
+    /// never empty.
     var genreOrder: [Genre] {
-        let selected = Genre.allCases.filter { selectedGenres.contains($0) }
-        let rest = Genre.allCases.filter { !selectedGenres.contains($0) }
-        return selected + rest
+        selectedGenres.isEmpty ? Genre.allCases : Genre.allCases.filter { selectedGenres.contains($0) }
     }
 
-    /// Every song the CSV has for this resident's bracket, grouped by genre —
-    /// personalized to genre (selection order) and decade (age bracket), and
-    /// never trimmed to a sample: a genre with 4 or 10 songs in the dataset
-    /// shows all 4 or all 10, not just one or two.
+    /// Every song the CSV has for this resident's bracket, restricted to their
+    /// selected genres and grouped by genre — personalized to BOTH genre
+    /// preference and decade (age bracket), and never trimmed within a shown
+    /// genre: a genre with 4 or 10 songs in the dataset shows all 4 or all 10.
     var librarySections: [(genre: Genre, songs: [Song])] {
         SongCatalog.sections(for: ageBracket, genreOrder: genreOrder)
     }

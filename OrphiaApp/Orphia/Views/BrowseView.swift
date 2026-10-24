@@ -1,11 +1,12 @@
 import SwiftUI
 
 /// Did not exist in the original sketches — this is what "Play Music" opens into.
-/// Pulls the FULL set of songs the CSV has for the resident's age bracket —
-/// every song in every genre for that bracket (10 for Classical, 4 for every
-/// other genre), not a hand-picked sample — grouped by genre, with genres the
-/// resident picked at Sign Up surfaced first. Each row is a real YouTube
-/// video; tapping it loads and autoplays that video on the Song Playing screen.
+/// Personalized on BOTH axes: filtered down to just the genres the resident
+/// picked at Sign Up (genre preference), within songs from their computed age
+/// bracket (decade) — and within each shown genre, the FULL set the CSV has
+/// for that bracket (10 for Classical, 4 for every other genre), not a
+/// hand-picked sample. Each row is a real YouTube video; tapping it loads and
+/// autoplays that video on the Song Playing screen.
 struct BrowseView: View {
     @Binding var path: [Route]
     @EnvironmentObject var appState: AppState
@@ -16,7 +17,7 @@ struct BrowseView: View {
                 Text("Choose a Song")
                     .font(.system(size: 24, weight: .bold))
                     .foregroundColor(AppColors.ink)
-                Text("Picked for your decade — tap any song to play it.")
+                Text("Picked for your favorite genres and decade — tap any song to play it.")
                     .font(.system(size: 15))
                     .foregroundColor(AppColors.muted)
                     .padding(.bottom, 8)
