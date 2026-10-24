@@ -1,0 +1,3 @@
+// Shared build settings for Orphia. Real values live in Secrets.xcconfig,
+// which is gitignored — copy Secrets.example.xcconfig to create it.
+#include? "Secrets.xcconfig"

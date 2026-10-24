@@ -5,7 +5,6 @@ enum Route: Hashable {
     case signUpName
     case signUpBirthYear
     case signUpGenres
-    case login
     case home
     case browse
     case playing
@@ -14,12 +13,12 @@ enum Route: Hashable {
 }
 
 /// Central app state shared across views via @EnvironmentObject.
-/// MVP note: there is no backend — everything lives in memory for this prototype/demo build.
+/// The resident's profile (name, birth year, genres) is loaded from and saved
+/// to Supabase by `AuthManager`; memories and now-playing state still live in
+/// memory for now.
 final class AppState: ObservableObject {
-    // Identity captured during sign up / login (demo defaults mirror the HTML
-    // prototype's "Dorothy" persona).
-    @Published var firstName: String = "Dorothy"
-    @Published var pin: String = "1234"
+    // Profile captured during onboarding, or loaded from Supabase on sign-in.
+    @Published var firstName: String = ""
     @Published var birthYear: String = ""
     @Published var selectedGenres: Set<Genre> = []
 
@@ -85,6 +84,19 @@ final class AppState: ObservableObject {
         }
         // if already at cap and genre isn't selected, tap is silently ignored —
         // mirrors the HTML prototype's toggleGenre() cap behavior.
+    }
+
+    func apply(_ profile: Profile) {
+        firstName = profile.firstName ?? ""
+        birthYear = profile.birthYear.map(String.init) ?? ""
+        selectedGenres = Set(profile.genres.compactMap(Genre.init(rawValue:)))
+    }
+
+    /// Clears the signed-in resident's profile on sign out.
+    func reset() {
+        firstName = ""
+        birthYear = ""
+        selectedGenres = []
     }
 
     func play(_ song: Song) {

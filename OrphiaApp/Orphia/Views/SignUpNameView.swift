@@ -1,13 +1,13 @@
 import SwiftUI
 
-/// Sign Up step 1 of 3. Replaces "username + passcode" text fields with
-/// First Name + a PIN pad — easier to tap accurately than a QWERTY keyboard,
-/// which matters since signup is self-service with no one present to help.
+/// Sign Up step 1 of 3, shown right after a new resident's first Google
+/// sign-in. The name is pre-filled from their Google account so most people
+/// just tap Continue — no typing needed unless they want to change it.
 struct SignUpNameView: View {
     @Binding var path: [Route]
     @EnvironmentObject var appState: AppState
+    @EnvironmentObject var auth: AuthManager
     @State private var name: String = ""
-    @State private var pinEntry: String = ""
 
     var body: some View {
         ScrollView {
@@ -26,23 +26,27 @@ struct SignUpNameView: View {
                     .cornerRadius(12)
                     .font(.system(size: 19))
 
-                Text("Create a PIN").font(.system(size: 16, weight: .semibold))
-                PinDotsView(filledCount: pinEntry.count)
-                PinPadView(pin: $pinEntry)
-
                 Button("Continue") {
-                    appState.firstName = name.isEmpty ? appState.firstName : name
-                    appState.pin = pinEntry
+                    appState.firstName = name.trimmingCharacters(in: .whitespaces)
                     path.append(.signUpBirthYear)
                 }
                 .buttonStyle(PrimaryButtonStyle())
                 .padding(.top, 10)
-                .disabled(name.trimmingCharacters(in: .whitespaces).isEmpty || pinEntry.count < 4)
+                .disabled(name.trimmingCharacters(in: .whitespaces).isEmpty)
+
+                // This is the first onboarding screen, so there's no Back —
+                // signing out is the way to switch to a different Google account.
+                Button("Not you? Sign out") {
+                    Task { await auth.signOut(appState: appState) }
+                }
+                .buttonStyle(GhostButtonStyle())
             }
             .padding(20)
         }
         .background(AppColors.bg)
         .navigationTitle("Sign Up")
         .navigationBarTitleDisplayMode(.inline)
+        .navigationBarBackButtonHidden(true)
+        .onAppear { name = appState.firstName }
     }
 }

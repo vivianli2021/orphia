@@ -9,6 +9,12 @@ packages:
   YouTubeiOSPlayerHelper:
     url: https://github.com/youtube/youtube-ios-player-helper.git
     from: 1.0.4
+  Supabase:
+    url: https://github.com/supabase/supabase-swift.git
+    from: 2.0.0
+  GoogleSignIn:
+    url: https://github.com/google/GoogleSignIn-iOS.git
+    from: 8.0.0
 
 targets:
   Orphia:
@@ -16,8 +22,13 @@ targets:
     platform: iOS
     sources:
       - path: Orphia
+    configFiles:
+      Debug: Config/App.xcconfig
+      Release: Config/App.xcconfig
     dependencies:
       - package: YouTubeiOSPlayerHelper
+      - package: Supabase
+      - package: GoogleSignIn
     info:
       path: Orphia/Info.plist
       properties:
@@ -28,6 +39,14 @@ targets:
           UIApplicationSupportsMultipleScenes: false
         UISupportedInterfaceOrientations:
           - UIInterfaceOrientationPortrait
+        # Values come from Config/Secrets.xcconfig (gitignored).
+        SupabaseURL: $(SUPABASE_URL)
+        SupabasePublishableKey: $(SUPABASE_PUBLISHABLE_KEY)
+        GIDClientID: $(GOOGLE_IOS_CLIENT_ID)
+        GIDServerClientID: $(GOOGLE_WEB_CLIENT_ID)
+        CFBundleURLTypes:
+          - CFBundleURLSchemes:
+              - $(GOOGLE_IOS_URL_SCHEME)
     settings:
       base:
         PRODUCT_BUNDLE_IDENTIFIER: com.orphia.app

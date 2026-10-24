@@ -1,9 +1,11 @@
 import SwiftUI
 
-/// Entry point. Only two choices, nothing else competing for attention —
-/// large wordmark, high contrast, no decorative clutter.
+/// Entry point. One choice, nothing else competing for attention —
+/// large wordmark, high contrast, no decorative clutter. New and returning
+/// residents use the same button; RootView routes new ones into onboarding.
 struct TitleView: View {
-    @Binding var path: [Route]
+    @EnvironmentObject var appState: AppState
+    @EnvironmentObject var auth: AuthManager
 
     var body: some View {
         VStack {
@@ -18,10 +20,26 @@ struct TitleView: View {
                 .foregroundColor(AppColors.muted)
                 .padding(.bottom, 40)
             Spacer()
-            Button("Log In") { path.append(.login) }
-                .buttonStyle(PrimaryButtonStyle())
-            Button("Sign Up") { path.append(.signUpName) }
-                .buttonStyle(SecondaryButtonStyle())
+
+            if let message = auth.errorMessage {
+                Text(message)
+                    .font(.system(size: 16))
+                    .foregroundColor(AppColors.rust)
+                    .multilineTextAlignment(.center)
+                    .padding(.bottom, 8)
+            }
+
+            Button {
+                Task { await auth.signInWithGoogle(into: appState) }
+            } label: {
+                if auth.isWorking {
+                    ProgressView().tint(.white)
+                } else {
+                    Text("Continue with Google")
+                }
+            }
+            .buttonStyle(PrimaryButtonStyle())
+            .disabled(auth.isWorking)
         }
         .padding(24)
         .frame(maxWidth: .infinity, maxHeight: .infinity)

@@ -7,6 +7,7 @@ import SwiftUI
 struct SignUpGenresView: View {
     @Binding var path: [Route]
     @EnvironmentObject var appState: AppState
+    @EnvironmentObject var auth: AuthManager
 
     private var count: Int { appState.selectedGenres.count }
     private var atMax: Bool { count >= AppState.maxGenres }
@@ -27,11 +28,27 @@ struct SignUpGenresView: View {
                     genreCard(genre)
                 }
 
-                Button("Finish") {
-                    path.append(.home)
+                if let message = auth.errorMessage {
+                    Text(message)
+                        .font(.system(size: 16))
+                        .foregroundColor(AppColors.rust)
+                        .padding(.top, 10)
+                }
+
+                // Saving the profile flips auth.status to .signedIn, and
+                // RootView then resets the stack to Home.
+                Button {
+                    Task { await auth.saveProfile(from: appState) }
+                } label: {
+                    if auth.isWorking {
+                        ProgressView().tint(.white)
+                    } else {
+                        Text("Finish")
+                    }
                 }
                 .buttonStyle(PrimaryButtonStyle())
                 .padding(.top, 10)
+                .disabled(count == 0 || auth.isWorking)
             }
             .padding(20)
         }

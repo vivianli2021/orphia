@@ -9,6 +9,8 @@ import SwiftUI
 struct HomeView: View {
     @Binding var path: [Route]
     @EnvironmentObject var appState: AppState
+    @EnvironmentObject var auth: AuthManager
+    @State private var confirmingSignOut = false
 
     private var continueSong: Song { appState.defaultSong }
     private var favoriteSong: Song { appState.favoriteSong }
@@ -61,8 +63,9 @@ struct HomeView: View {
         .navigationBarBackButtonHidden(true)
         .toolbar {
             ToolbarItem(placement: .navigationBarTrailing) {
-                Button {
-                    path.removeAll()
+                Menu {
+                    Text(appState.firstName)
+                    Button("Sign Out", role: .destructive) { confirmingSignOut = true }
                 } label: {
                     ZStack {
                         Circle().fill(AppColors.primary)
@@ -72,7 +75,15 @@ struct HomeView: View {
                     }
                     .frame(width: 34, height: 34)
                 }
+                .accessibilityLabel("Account")
             }
+        }
+        // Confirm first — a stray tap shouldn't sign a resident out with no one around to help.
+        .confirmationDialog("Sign out of Orphia?", isPresented: $confirmingSignOut, titleVisibility: .visible) {
+            Button("Sign Out", role: .destructive) {
+                Task { await auth.signOut(appState: appState) }
+            }
+            Button("Cancel", role: .cancel) {}
         }
     }
 }

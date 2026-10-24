@@ -11,16 +11,18 @@
 		28C98ACAFB3522FEDD8B8BD0 /* CarnationLogo.swift in Sources */ = {isa = PBXBuildFile; fileRef = F5B072BF375ACB88BD27529A /* CarnationLogo.swift */; };
 		2B1B9BFF3342DA8C210D4AE7 /* AgeBracket.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6FB61696B0C361D05D6F63C6 /* AgeBracket.swift */; };
 		3346A4225D2CD5069523A615 /* SignUpBirthYearView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 66E81FCE9C3A71A42708549E /* SignUpBirthYearView.swift */; };
-		4527C3C684454481829ECD7C /* PinPadView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 35543CF83DFFC6DF8E40908D /* PinPadView.swift */; };
+		42D3AA17F31F23326D535AE2 /* GoogleSignIn in Frameworks */ = {isa = PBXBuildFile; productRef = FE1DD44113747F573723D140 /* GoogleSignIn */; };
 		465398F43DE63BF8C5911F7D /* SongCatalogData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1984BB5F4828A439C1D44B17 /* SongCatalogData.swift */; };
 		4F789E8D499F2A21E77F55EC /* TitleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA50181CB16F79112A094F66 /* TitleView.swift */; };
 		6FB0341410DD46AF98D05056 /* RootView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BE0BFE181C31B6F4C097D2A /* RootView.swift */; };
 		76E301C42FAEDCDBC1B7FEAE /* SignUpNameView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 90B18A6E0AAEA8AB0A3089E2 /* SignUpNameView.swift */; };
 		79F56140FFB38CD2C2F18E68 /* SongCatalog.swift in Sources */ = {isa = PBXBuildFile; fileRef = A4A131E7B3639A4021067B1F /* SongCatalog.swift */; };
 		79F6E8E1C93FBD806A200160 /* OrphiaApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9097B83D0CA5BB948A72A75C /* OrphiaApp.swift */; };
+		9477CFFC247E7593B37E7605 /* Supabase in Frameworks */ = {isa = PBXBuildFile; productRef = C352EE2732080B0B254008F7 /* Supabase */; };
+		964B6D2E49ECF51C788A67D4 /* AuthManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAE5E8C20BBE5A346047F50D /* AuthManager.swift */; };
 		9B92F98F7A5A019FC9B0029C /* AppColors.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB391039AB05209B73D21958 /* AppColors.swift */; };
 		A3B4B79FD77FF9EEBF41C116 /* YouTubeiOSPlayerHelper in Frameworks */ = {isa = PBXBuildFile; productRef = 1D1DCB15BE52518C8A9091AB /* YouTubeiOSPlayerHelper */; };
-		AB3A6C84105744E6605CD996 /* LoginView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 285694A54BB5146B8628B5FF /* LoginView.swift */; };
+		A782D82364DB837A1CD614F4 /* Supabase.swift in Sources */ = {isa = PBXBuildFile; fileRef = EED3D0C466F9919FE3DEE49F /* Supabase.swift */; };
 		B36EE120108ACBDC122C2881 /* SongPlayingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C08D61249E52295D5B25DB3 /* SongPlayingView.swift */; };
 		BA8BBA8A967B4326C4BE8DA5 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 75E50C228C628300CEFE6FA2 /* Assets.xcassets */; };
 		C3D31A4E560BE4D99A7A3217 /* MyMemoriesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 281A3469F57132CCAA20F09B /* MyMemoriesView.swift */; };
@@ -43,8 +45,6 @@
 		1BE0BFE181C31B6F4C097D2A /* RootView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RootView.swift; sourceTree = "<group>"; };
 		1FAD1139F303EFA1FFD65D9E /* Orphia.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = Orphia.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		281A3469F57132CCAA20F09B /* MyMemoriesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyMemoriesView.swift; sourceTree = "<group>"; };
-		285694A54BB5146B8628B5FF /* LoginView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginView.swift; sourceTree = "<group>"; };
-		35543CF83DFFC6DF8E40908D /* PinPadView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PinPadView.swift; sourceTree = "<group>"; };
 		439A97D36A3CF385EA905FF5 /* ButtonStyles.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ButtonStyles.swift; sourceTree = "<group>"; };
 		5308D71678BC090B3498BAC4 /* Models.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Models.swift; sourceTree = "<group>"; };
 		54147F700415AB05FEA46488 /* HomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeView.swift; sourceTree = "<group>"; };
@@ -53,6 +53,7 @@
 		66E81FCE9C3A71A42708549E /* SignUpBirthYearView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignUpBirthYearView.swift; sourceTree = "<group>"; };
 		6FB61696B0C361D05D6F63C6 /* AgeBracket.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AgeBracket.swift; sourceTree = "<group>"; };
 		75E50C228C628300CEFE6FA2 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		767387540D348015A2D61AD1 /* App.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = App.xcconfig; sourceTree = "<group>"; };
 		8C08D61249E52295D5B25DB3 /* SongPlayingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SongPlayingView.swift; sourceTree = "<group>"; };
 		9097B83D0CA5BB948A72A75C /* OrphiaApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrphiaApp.swift; sourceTree = "<group>"; };
 		90B18A6E0AAEA8AB0A3089E2 /* SignUpNameView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignUpNameView.swift; sourceTree = "<group>"; };
@@ -62,7 +63,9 @@
 		B18366317872D6DBA81EBEE4 /* AudioRecorderManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudioRecorderManager.swift; sourceTree = "<group>"; };
 		B9B894613069227926B649DC /* BrowseView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BrowseView.swift; sourceTree = "<group>"; };
 		BB391039AB05209B73D21958 /* AppColors.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppColors.swift; sourceTree = "<group>"; };
+		EED3D0C466F9919FE3DEE49F /* Supabase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Supabase.swift; sourceTree = "<group>"; };
 		F5B072BF375ACB88BD27529A /* CarnationLogo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CarnationLogo.swift; sourceTree = "<group>"; };
+		FAE5E8C20BBE5A346047F50D /* AuthManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthManager.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -71,6 +74,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				A3B4B79FD77FF9EEBF41C116 /* YouTubeiOSPlayerHelper in Frameworks */,
+				9477CFFC247E7593B37E7605 /* Supabase in Frameworks */,
+				42D3AA17F31F23326D535AE2 /* GoogleSignIn in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -86,6 +91,7 @@
 				9097B83D0CA5BB948A72A75C /* OrphiaApp.swift */,
 				1BE0BFE181C31B6F4C097D2A /* RootView.swift */,
 				9941D4B8F73453684970EFA1 /* Audio */,
+				89D51BD4A0FBE00B27D3E6CC /* Auth */,
 				7CE3E56BECCE789DBA8ADC8F /* Components */,
 				8587DD93FB26D00D940F1A5D /* Models */,
 				9DCADC3AF7C28AE5874ABF0E /* Theme */,
@@ -97,6 +103,7 @@
 		7C91B8E538AF7D5AC6CC13EC = {
 			isa = PBXGroup;
 			children = (
+				D73FCFBED8C1FF1F44D5A4AE /* Config */,
 				23F1011633376B1010489604 /* Orphia */,
 				E4F187D02EF70C3E8B520440 /* Products */,
 			);
@@ -106,7 +113,6 @@
 			isa = PBXGroup;
 			children = (
 				439A97D36A3CF385EA905FF5 /* ButtonStyles.swift */,
-				35543CF83DFFC6DF8E40908D /* PinPadView.swift */,
 				65EB052238EC1ACC7C7FD1FE /* YouTubePlayerView.swift */,
 			);
 			path = Components;
@@ -121,6 +127,15 @@
 				1984BB5F4828A439C1D44B17 /* SongCatalogData.swift */,
 			);
 			path = Models;
+			sourceTree = "<group>";
+		};
+		89D51BD4A0FBE00B27D3E6CC /* Auth */ = {
+			isa = PBXGroup;
+			children = (
+				FAE5E8C20BBE5A346047F50D /* AuthManager.swift */,
+				EED3D0C466F9919FE3DEE49F /* Supabase.swift */,
+			);
+			path = Auth;
 			sourceTree = "<group>";
 		};
 		9941D4B8F73453684970EFA1 /* Audio */ = {
@@ -141,12 +156,19 @@
 			path = Theme;
 			sourceTree = "<group>";
 		};
+		D73FCFBED8C1FF1F44D5A4AE /* Config */ = {
+			isa = PBXGroup;
+			children = (
+				767387540D348015A2D61AD1 /* App.xcconfig */,
+			);
+			path = Config;
+			sourceTree = "<group>";
+		};
 		E48153F09B3D8E8E9F048EDB /* Views */ = {
 			isa = PBXGroup;
 			children = (
 				B9B894613069227926B649DC /* BrowseView.swift */,
 				54147F700415AB05FEA46488 /* HomeView.swift */,
-				285694A54BB5146B8628B5FF /* LoginView.swift */,
 				0618DD8BC37BA6F000B12E23 /* MemoryCaptureView.swift */,
 				281A3469F57132CCAA20F09B /* MyMemoriesView.swift */,
 				66E81FCE9C3A71A42708549E /* SignUpBirthYearView.swift */,
@@ -184,6 +206,8 @@
 			name = Orphia;
 			packageProductDependencies = (
 				1D1DCB15BE52518C8A9091AB /* YouTubeiOSPlayerHelper */,
+				C352EE2732080B0B254008F7 /* Supabase */,
+				FE1DD44113747F573723D140 /* GoogleSignIn */,
 			);
 			productName = Orphia;
 			productReference = 1FAD1139F303EFA1FFD65D9E /* Orphia.app */;
@@ -214,6 +238,8 @@
 			mainGroup = 7C91B8E538AF7D5AC6CC13EC;
 			minimizedProjectReferenceProxies = 1;
 			packageReferences = (
+				D2FE563601E09CA3C893516D /* XCRemoteSwiftPackageReference "GoogleSignIn-iOS" */,
+				52286510CB70A2B38AA14BE6 /* XCRemoteSwiftPackageReference "supabase-swift" */,
 				49D3E456E1784F827074D452 /* XCRemoteSwiftPackageReference "youtube-ios-player-helper" */,
 			);
 			preferredProjectObjectVersion = 77;
@@ -247,16 +273,15 @@
 				D8862E6EF4C0368ABD527239 /* AppState.swift in Sources */,
 				ECE81974629D4978CD412C0A /* AudioPlaybackManager.swift in Sources */,
 				D048B7D44FFE58BBA403D036 /* AudioRecorderManager.swift in Sources */,
+				964B6D2E49ECF51C788A67D4 /* AuthManager.swift in Sources */,
 				CD76BD276075CFD5518401A8 /* BrowseView.swift in Sources */,
 				E48F50C63DD7E9EE09F3C455 /* ButtonStyles.swift in Sources */,
 				28C98ACAFB3522FEDD8B8BD0 /* CarnationLogo.swift in Sources */,
 				E290D00C60697E3E040BD126 /* HomeView.swift in Sources */,
-				AB3A6C84105744E6605CD996 /* LoginView.swift in Sources */,
 				E0F2D528EFF5F5934785ABD2 /* MemoryCaptureView.swift in Sources */,
 				E46FCDC797C58B0BB6EA815D /* Models.swift in Sources */,
 				C3D31A4E560BE4D99A7A3217 /* MyMemoriesView.swift in Sources */,
 				79F6E8E1C93FBD806A200160 /* OrphiaApp.swift in Sources */,
-				4527C3C684454481829ECD7C /* PinPadView.swift in Sources */,
 				6FB0341410DD46AF98D05056 /* RootView.swift in Sources */,
 				3346A4225D2CD5069523A615 /* SignUpBirthYearView.swift in Sources */,
 				28626FA79DF98761C040164B /* SignUpGenresView.swift in Sources */,
@@ -264,6 +289,7 @@
 				79F56140FFB38CD2C2F18E68 /* SongCatalog.swift in Sources */,
 				465398F43DE63BF8C5911F7D /* SongCatalogData.swift in Sources */,
 				B36EE120108ACBDC122C2881 /* SongPlayingView.swift in Sources */,
+				A782D82364DB837A1CD614F4 /* Supabase.swift in Sources */,
 				4F789E8D499F2A21E77F55EC /* TitleView.swift in Sources */,
 				D654CCBD807C5709264161CD /* YouTubePlayerView.swift in Sources */,
 			);
@@ -274,6 +300,7 @@
 /* Begin XCBuildConfiguration section */
 		52D5BF034E56E413F0EA6171 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 767387540D348015A2D61AD1 /* App.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
@@ -294,6 +321,7 @@
 		};
 		60F5F66DC498129A38457AA2 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 767387540D348015A2D61AD1 /* App.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
@@ -463,6 +491,22 @@
 				minimumVersion = 1.0.4;
 			};
 		};
+		52286510CB70A2B38AA14BE6 /* XCRemoteSwiftPackageReference "supabase-swift" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/supabase/supabase-swift.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 2.0.0;
+			};
+		};
+		D2FE563601E09CA3C893516D /* XCRemoteSwiftPackageReference "GoogleSignIn-iOS" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/google/GoogleSignIn-iOS.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 8.0.0;
+			};
+		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -470,6 +514,16 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 49D3E456E1784F827074D452 /* XCRemoteSwiftPackageReference "youtube-ios-player-helper" */;
 			productName = YouTubeiOSPlayerHelper;
+		};
+		C352EE2732080B0B254008F7 /* Supabase */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 52286510CB70A2B38AA14BE6 /* XCRemoteSwiftPackageReference "supabase-swift" */;
+			productName = Supabase;
+		};
+		FE1DD44113747F573723D140 /* GoogleSignIn */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = D2FE563601E09CA3C893516D /* XCRemoteSwiftPackageReference "GoogleSignIn-iOS" */;
+			productName = GoogleSignIn;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};
