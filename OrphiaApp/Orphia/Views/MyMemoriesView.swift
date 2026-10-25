@@ -27,7 +27,7 @@ struct MyMemoriesView: View {
 
                 ForEach(appState.favoriteSongs) { song in
                     Button {
-                        appState.play(song)
+                        appState.play(song, context: .favorites)
                         path.append(.playing)
                     } label: {
                         HStack(spacing: 14) {

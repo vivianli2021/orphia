@@ -49,7 +49,11 @@ struct HomeView: View {
                     .buttonStyle(PrimaryButtonStyle())
 
                 Button("♥  Play Favorites") {
-                    appState.play(favoriteSong)
+                    // Only enter the favorites playlist context if there's a real
+                    // favorite to play — `favoriteSong` falls back to a library pick
+                    // when favoriteSongs is empty, so forward/back should browse the
+                    // library in that case, not land in an empty favorites playlist.
+                    appState.play(favoriteSong, context: appState.favoriteSongs.isEmpty ? .library : .favorites)
                     path.append(.playing)
                 }
                 .buttonStyle(SecondaryButtonStyle())

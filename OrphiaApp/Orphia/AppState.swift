@@ -1,6 +1,14 @@
 import Foundation
 import SwiftUI
 
+/// Which song list Song Playing's forward/back buttons step through —
+/// separate playlists so playing from Favorites doesn't wander into the full
+/// library, and vice versa.
+enum PlaylistContext {
+    case library
+    case favorites
+}
+
 enum Route: Hashable {
     case signUpName
     case signUpBirthYear
@@ -25,6 +33,7 @@ final class AppState: ObservableObject {
     // Now-playing state.
     @Published var currentSong: Song = SongCatalog.fallbackSong(for: .seventies)
     @Published var isPlaying: Bool = true // the player autoplays on load
+    @Published var playlistContext: PlaylistContext = .library
 
     // Favorite/dislike are per-song and mutually exclusive — see toggleFavorite/
     // toggleDislike. favoriteSongIDs is ordered (most recently favorited first)
@@ -71,11 +80,17 @@ final class AppState: ObservableObject {
             .filter { !$0.songs.isEmpty }
     }
 
-    /// The resident's current playlist as one ordered list (Browse's genre
-    /// sections flattened in display order) — what Song Playing's forward/back
-    /// buttons step through.
+    /// What Song Playing's forward/back buttons step through, per
+    /// `playlistContext`: the full personalized library (Browse's genre
+    /// sections flattened in display order), or just the favorited songs.
+    /// Can legitimately be empty — e.g. a resident with zero favorites who
+    /// plays one from the fallback pick, or the last favorite just got
+    /// un-hearted — callers must handle that, not assume at least one song.
     var currentPlaylist: [Song] {
-        librarySections.flatMap { $0.songs }
+        switch playlistContext {
+        case .library: return librarySections.flatMap { $0.songs }
+        case .favorites: return favoriteSongs
+        }
     }
 
     var defaultSong: Song {
@@ -156,9 +171,10 @@ final class AppState: ObservableObject {
         dislikedSongIDs = []
     }
 
-    func play(_ song: Song) {
+    func play(_ song: Song, context: PlaylistContext = .library) {
         currentSong = song
         isPlaying = true
+        playlistContext = context
     }
 
     func addMemory(for song: Song, audioFileName: String) {

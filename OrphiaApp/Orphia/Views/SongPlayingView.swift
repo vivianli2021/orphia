@@ -51,7 +51,7 @@ struct SongPlayingView: View {
                         if appState.isDisliked(song), let oldIndex {
                             let newPlaylist = appState.currentPlaylist
                             if !newPlaylist.isEmpty {
-                                appState.play(newPlaylist[min(oldIndex, newPlaylist.count - 1)])
+                                appState.play(newPlaylist[min(oldIndex, newPlaylist.count - 1)], context: appState.playlistContext)
                             }
                         }
                     }
@@ -63,8 +63,11 @@ struct SongPlayingView: View {
 
                 // Transport row: pause/play is the true center, with back and
                 // forward symmetric on either side of it. Back/forward step through
-                // AppState.currentPlaylist (the resident's personalized, dislike-
-                // filtered song list), wrapping around at either end.
+                // AppState.currentPlaylist (library or favorites, whichever is
+                // active), wrapping around at either end. Dimmed + disabled rather
+                // than silently doing nothing when that playlist has nothing (or
+                // only this one song) to step to — e.g. a favorites playlist with
+                // zero or one favorite.
                 HStack(spacing: 28) {
                     Button { step(by: -1) } label: {
                         Image(systemName: "backward.end.fill")
@@ -75,6 +78,8 @@ struct SongPlayingView: View {
                             .overlay(Circle().stroke(AppColors.border, lineWidth: 2))
                             .clipShape(Circle())
                     }
+                    .disabled(!canStep)
+                    .opacity(canStep ? 1 : 0.4)
 
                     Button {
                         appState.isPlaying.toggle()
@@ -96,6 +101,8 @@ struct SongPlayingView: View {
                             .overlay(Circle().stroke(AppColors.border, lineWidth: 2))
                             .clipShape(Circle())
                     }
+                    .disabled(!canStep)
+                    .opacity(canStep ? 1 : 0.4)
                 }
                 .padding(.top, 4)
 
@@ -110,14 +117,24 @@ struct SongPlayingView: View {
         .navigationBarTitleDisplayMode(.inline)
     }
 
-    /// Moves to the adjacent song in AppState.currentPlaylist, wrapping around
-    /// at either end (delta is +1 for forward, -1 for back).
+    /// False when the active playlist has nothing else to step to — empty, or
+    /// just this one song (e.g. a favorites playlist with only the song
+    /// currently playing).
+    private var canStep: Bool {
+        appState.currentPlaylist.count > 1
+    }
+
+    /// Moves to the adjacent song in AppState.currentPlaylist (library or
+    /// favorites, whichever is active), wrapping around at either end (delta
+    /// is +1 for forward, -1 for back). The playlist can be empty (e.g. a
+    /// favorites playlist with nothing favorited) — then this is a no-op
+    /// rather than a crash.
     private func step(by delta: Int) {
         let playlist = appState.currentPlaylist
         guard !playlist.isEmpty,
               let currentIndex = playlist.firstIndex(where: { $0.id == appState.currentSong.id }) else { return }
         let nextIndex = (currentIndex + delta + playlist.count) % playlist.count
-        appState.play(playlist[nextIndex])
+        appState.play(playlist[nextIndex], context: appState.playlistContext)
     }
 
     private func ctrlButton(systemName: String, size: CGFloat, iconSize: CGFloat, active: Bool, activeColor: Color, action: @escaping () -> Void) -> some View {
