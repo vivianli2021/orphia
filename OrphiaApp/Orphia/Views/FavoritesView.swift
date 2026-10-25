@@ -2,7 +2,7 @@ import SwiftUI
 
 /// What Home's "Play Favorites" opens: a Browse-style list of only the songs
 /// the resident has hearted. Picking one plays it in the favorites playlist,
-/// which is the only place Song Playing shows back/forward.
+/// so Song Playing's back/forward stay within favorites.
 struct FavoritesView: View {
     @Binding var path: [Route]
     @EnvironmentObject var appState: AppState

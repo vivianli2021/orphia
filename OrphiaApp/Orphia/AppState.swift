@@ -1,8 +1,8 @@
 import Foundation
 import SwiftUI
 
-/// Where the current song was picked from. Only `.favorites` gets back/forward
-/// buttons on Song Playing; songs picked from Browse play one at a time.
+/// Which list Song Playing's back/forward step through: the normal library, or
+/// only favorites (when the song was picked from Play Favorites).
 enum PlaylistContext {
     case library
     case favorites
@@ -77,6 +77,15 @@ final class AppState: ObservableObject {
         SongCatalog.sections(for: ageBracket, genreOrder: genreOrder)
             .map { (genre: $0.genre, songs: $0.songs.filter { !dislikedSongIDs.contains($0.id) }) }
             .filter { !$0.songs.isEmpty }
+    }
+
+    /// What Song Playing's back/forward step through: Browse's songs in display
+    /// order, or only favorites. Can be empty (e.g. no favorites left).
+    var currentPlaylist: [Song] {
+        switch playlistContext {
+        case .library: return librarySections.flatMap { $0.songs }
+        case .favorites: return favoriteSongs
+        }
     }
 
     var defaultSong: Song {

@@ -39,14 +39,14 @@ struct SongPlayingView: View {
                 HStack(spacing: 24) {
                     ctrlButton(systemName: "hand.thumbsdown", size: 56, iconSize: 22, active: appState.isDisliked(appState.currentSong), activeColor: AppColors.rust) {
                         let song = appState.currentSong
-                        let oldIndex = appState.favoriteSongs.firstIndex(of: song)
+                        let oldIndex = appState.currentPlaylist.firstIndex(of: song)
                         appState.toggleDislike(song)
-                        // In the favorites playlist, a dislike also un-favorites the
-                        // song, so move on to whatever now sits at its old position.
-                        if isFavoritesPlaylist, appState.isDisliked(song), let oldIndex {
-                            let favorites = appState.favoriteSongs
-                            if !favorites.isEmpty {
-                                appState.play(favorites[min(oldIndex, favorites.count - 1)], context: .favorites)
+                        // A dislike removes the song from either playlist, so move on
+                        // to whatever now sits at its old position.
+                        if appState.isDisliked(song), let oldIndex {
+                            let playlist = appState.currentPlaylist
+                            if !playlist.isEmpty {
+                                appState.play(playlist[min(oldIndex, playlist.count - 1)], context: appState.playlistContext)
                             }
                         }
                     }
@@ -56,12 +56,10 @@ struct SongPlayingView: View {
                 }
                 .padding(.top, 6)
 
-                // Back/forward only exist in the favorites playlist (opened from
-                // Home's Play Favorites); songs played from Browse get pause/play alone.
+                // Back/forward step through the normal Browse list, or only through
+                // favorites when the song was picked from Play Favorites.
                 HStack(spacing: 28) {
-                    if isFavoritesPlaylist {
-                        stepButton(systemName: "backward.end.fill") { step(by: -1) }
-                    }
+                    stepButton(systemName: "backward.end.fill") { step(by: -1) }
 
                     Button {
                         appState.isPlaying.toggle()
@@ -74,9 +72,7 @@ struct SongPlayingView: View {
                             .clipShape(Circle())
                     }
 
-                    if isFavoritesPlaylist {
-                        stepButton(systemName: "forward.end.fill") { step(by: 1) }
-                    }
+                    stepButton(systemName: "forward.end.fill") { step(by: 1) }
                 }
                 .padding(.top, 4)
 
@@ -91,27 +87,25 @@ struct SongPlayingView: View {
         .navigationBarTitleDisplayMode(.inline)
     }
 
-    private var isFavoritesPlaylist: Bool { appState.playlistContext == .favorites }
-
-    /// False when there's no other favorite to step to (zero favorites, or only
-    /// the one currently playing).
+    /// False when the active playlist has no other song to step to (empty, or
+    /// only the one currently playing).
     private var canStep: Bool {
-        appState.favoriteSongs.contains { $0.id != appState.currentSong.id }
+        appState.currentPlaylist.contains { $0.id != appState.currentSong.id }
     }
 
-    /// Steps through favorites with wraparound. If the current song was just
-    /// un-hearted (so it's no longer in the list), forward goes to the first
-    /// favorite and back to the last.
+    /// Steps through the active playlist with wraparound. If the current song
+    /// isn't in it (e.g. just un-hearted while playing favorites), forward goes
+    /// to the first song and back to the last.
     private func step(by delta: Int) {
-        let favorites = appState.favoriteSongs
-        guard !favorites.isEmpty else { return }
+        let playlist = appState.currentPlaylist
+        guard !playlist.isEmpty else { return }
         let next: Song
-        if let index = favorites.firstIndex(of: appState.currentSong) {
-            next = favorites[(index + delta + favorites.count) % favorites.count]
+        if let index = playlist.firstIndex(of: appState.currentSong) {
+            next = playlist[(index + delta + playlist.count) % playlist.count]
         } else {
-            next = delta > 0 ? favorites[0] : favorites[favorites.count - 1]
+            next = delta > 0 ? playlist[0] : playlist[playlist.count - 1]
         }
-        appState.play(next, context: .favorites)
+        appState.play(next, context: appState.playlistContext)
     }
 
     private func stepButton(systemName: String, action: @escaping () -> Void) -> some View {
