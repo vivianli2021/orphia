@@ -45,6 +45,7 @@ struct RootView: View {
         case .playing: SongPlayingView(path: $path)
         case .memoryCapture: MemoryCaptureView(path: $path)
         case .myMemories: MyMemoriesView(path: $path)
+        case .favorites: FavoritesView(path: $path)
         }
     }
 }

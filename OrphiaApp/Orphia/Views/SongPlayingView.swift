@@ -36,27 +36,45 @@ struct SongPlayingView: View {
 
                 // Reaction row: thumbs-down / favorite, as their own centered pair —
                 // kept separate from transport so the transport row below can be a
-                // clean, symmetric back / pause / forward layout.
+                // clean, symmetric back / pause / forward layout. Mutually exclusive:
+                // AppState.toggleFavorite/toggleDislike clear the other one. A dislike
+                // also removes the song from this (and every future) playlist — see
+                // AppState.librarySections — so advance away from it if it was playing.
                 HStack(spacing: 24) {
-                    ctrlButton(systemName: "hand.thumbsdown", size: 56, iconSize: 22, active: appState.thumbsDown, activeColor: AppColors.rust) {
-                        appState.thumbsDown.toggle()
+                    ctrlButton(systemName: "hand.thumbsdown", size: 56, iconSize: 22, active: appState.isDisliked(appState.currentSong), activeColor: AppColors.rust) {
+                        let song = appState.currentSong
+                        let oldIndex = appState.currentPlaylist.firstIndex(where: { $0.id == song.id })
+                        appState.toggleDislike(song)
+                        // Disliking removes `song` from currentPlaylist, so step
+                        // using where it WAS, landing on whatever now sits at (or
+                        // just before, if it was last) that position.
+                        if appState.isDisliked(song), let oldIndex {
+                            let newPlaylist = appState.currentPlaylist
+                            if !newPlaylist.isEmpty {
+                                appState.play(newPlaylist[min(oldIndex, newPlaylist.count - 1)])
+                            }
+                        }
                     }
-                    ctrlButton(systemName: "heart.fill", size: 56, iconSize: 22, active: appState.isFavorite, activeColor: AppColors.carnation) {
-                        appState.isFavorite.toggle()
+                    ctrlButton(systemName: "heart.fill", size: 56, iconSize: 22, active: appState.isFavorite(appState.currentSong), activeColor: AppColors.carnation) {
+                        appState.toggleFavorite(appState.currentSong)
                     }
                 }
                 .padding(.top, 6)
 
                 // Transport row: pause/play is the true center, with back and
-                // forward symmetric on either side of it.
+                // forward symmetric on either side of it. Back/forward step through
+                // AppState.currentPlaylist (the resident's personalized, dislike-
+                // filtered song list), wrapping around at either end.
                 HStack(spacing: 28) {
-                    Image(systemName: "backward.end.fill")
-                        .font(.system(size: 22))
-                        .foregroundColor(AppColors.ink)
-                        .frame(width: 56, height: 56)
-                        .background(Color.white)
-                        .overlay(Circle().stroke(AppColors.border, lineWidth: 2))
-                        .clipShape(Circle())
+                    Button { step(by: -1) } label: {
+                        Image(systemName: "backward.end.fill")
+                            .font(.system(size: 22))
+                            .foregroundColor(AppColors.ink)
+                            .frame(width: 56, height: 56)
+                            .background(Color.white)
+                            .overlay(Circle().stroke(AppColors.border, lineWidth: 2))
+                            .clipShape(Circle())
+                    }
 
                     Button {
                         appState.isPlaying.toggle()
@@ -69,13 +87,15 @@ struct SongPlayingView: View {
                             .clipShape(Circle())
                     }
 
-                    Image(systemName: "forward.end.fill")
-                        .font(.system(size: 22))
-                        .foregroundColor(AppColors.ink)
-                        .frame(width: 56, height: 56)
-                        .background(Color.white)
-                        .overlay(Circle().stroke(AppColors.border, lineWidth: 2))
-                        .clipShape(Circle())
+                    Button { step(by: 1) } label: {
+                        Image(systemName: "forward.end.fill")
+                            .font(.system(size: 22))
+                            .foregroundColor(AppColors.ink)
+                            .frame(width: 56, height: 56)
+                            .background(Color.white)
+                            .overlay(Circle().stroke(AppColors.border, lineWidth: 2))
+                            .clipShape(Circle())
+                    }
                 }
                 .padding(.top, 4)
 
@@ -88,6 +108,16 @@ struct SongPlayingView: View {
         .background(AppColors.bg)
         .navigationTitle("")
         .navigationBarTitleDisplayMode(.inline)
+    }
+
+    /// Moves to the adjacent song in AppState.currentPlaylist, wrapping around
+    /// at either end (delta is +1 for forward, -1 for back).
+    private func step(by delta: Int) {
+        let playlist = appState.currentPlaylist
+        guard !playlist.isEmpty,
+              let currentIndex = playlist.firstIndex(where: { $0.id == appState.currentSong.id }) else { return }
+        let nextIndex = (currentIndex + delta + playlist.count) % playlist.count
+        appState.play(playlist[nextIndex])
     }
 
     private func ctrlButton(systemName: String, size: CGFloat, iconSize: CGFloat, active: Bool, activeColor: Color, action: @escaping () -> Void) -> some View {
