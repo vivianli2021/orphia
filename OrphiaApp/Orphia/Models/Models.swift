@@ -40,7 +40,15 @@ struct Memory: Identifiable, Hashable {
     let id: UUID
     let song: Song
     let dateLabel: String
-    let audioFileName: String // file in the app's Documents directory
+    let audioFileName: String // file in the app's Documents directory; empty for demo-seeded memories
+    var transcript: TranscriptStatus = .notStarted
+}
+
+enum TranscriptStatus: Hashable {
+    case notStarted
+    case inProgress
+    case done(String)
+    case failed(String)
 }
 
 // The song library itself now lives in SongCatalog.swift (query layer) and the

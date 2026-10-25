@@ -159,5 +159,33 @@ final class AppState: ObservableObject {
     func addMemory(for song: Song, audioFileName: String) {
         let memory = Memory(id: UUID(), song: song, dateLabel: "Today", audioFileName: audioFileName)
         memories.insert(memory, at: 0)
+        transcribeMemory(id: memory.id)
+    }
+
+    /// Writes out a memory's recording as text and stores it on the memory.
+    /// Runs once per memory; pass `retry` to try again after a failure.
+    func transcribeMemory(id: UUID, retry: Bool = false) {
+        guard let index = memories.firstIndex(where: { $0.id == id }) else { return }
+        let memory = memories[index]
+        guard !memory.audioFileName.isEmpty else { return }
+        switch memory.transcript {
+        case .inProgress, .done: return
+        case .failed where !retry: return
+        default: break
+        }
+
+        memories[index].transcript = .inProgress
+        let url = AudioRecorderManager.documentsDirectory().appendingPathComponent(memory.audioFileName)
+        Task { @MainActor in
+            let result: TranscriptStatus
+            do {
+                result = .done(try await MemoryTranscriber.transcribe(fileURL: url))
+            } catch {
+                result = .failed(MemoryTranscriber.message(for: error))
+            }
+            if let i = self.memories.firstIndex(where: { $0.id == id }) {
+                self.memories[i].transcript = result
+            }
+        }
     }
 }

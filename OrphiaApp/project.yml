@@ -35,6 +35,7 @@ targets:
         CFBundleDisplayName: Orphia
         UILaunchScreen: {}
         NSMicrophoneUsageDescription: "Orphia records short voice memos so you can save a memory connected to a song. Recordings stay on your device and are never shared automatically."
+        NSSpeechRecognitionUsageDescription: "Orphia writes out your voice memories as text so you can read them back."
         UIApplicationSceneManifest:
           UIApplicationSupportsMultipleScenes: false
         UISupportedInterfaceOrientations:

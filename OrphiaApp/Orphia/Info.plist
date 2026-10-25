@@ -35,6 +35,8 @@
 	<string>$(GOOGLE_WEB_CLIENT_ID)</string>
 	<key>NSMicrophoneUsageDescription</key>
 	<string>Orphia records short voice memos so you can save a memory connected to a song. Recordings stay on your device and are never shared automatically.</string>
+	<key>NSSpeechRecognitionUsageDescription</key>
+	<string>Orphia writes out your voice memories as text so you can read them back.</string>
 	<key>SupabasePublishableKey</key>
 	<string>$(SUPABASE_PUBLISHABLE_KEY)</string>
 	<key>SupabaseURL</key>

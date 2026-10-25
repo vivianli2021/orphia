@@ -24,6 +24,7 @@
 		A3B4B79FD77FF9EEBF41C116 /* YouTubeiOSPlayerHelper in Frameworks */ = {isa = PBXBuildFile; productRef = 1D1DCB15BE52518C8A9091AB /* YouTubeiOSPlayerHelper */; };
 		A782D82364DB837A1CD614F4 /* Supabase.swift in Sources */ = {isa = PBXBuildFile; fileRef = EED3D0C466F9919FE3DEE49F /* Supabase.swift */; };
 		B36EE120108ACBDC122C2881 /* SongPlayingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C08D61249E52295D5B25DB3 /* SongPlayingView.swift */; };
+		B85F9868E6299C3B60184D12 /* MemoryTranscriber.swift in Sources */ = {isa = PBXBuildFile; fileRef = 13661D8F167DBD605B5C3F0A /* MemoryTranscriber.swift */; };
 		BA8BBA8A967B4326C4BE8DA5 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 75E50C228C628300CEFE6FA2 /* Assets.xcassets */; };
 		C3D31A4E560BE4D99A7A3217 /* MyMemoriesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 281A3469F57132CCAA20F09B /* MyMemoriesView.swift */; };
 		CD76BD276075CFD5518401A8 /* BrowseView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9B894613069227926B649DC /* BrowseView.swift */; };
@@ -42,6 +43,7 @@
 		03FA6AD9C8ADD523C1F42AE1 /* AudioPlaybackManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudioPlaybackManager.swift; sourceTree = "<group>"; };
 		0618DD8BC37BA6F000B12E23 /* MemoryCaptureView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MemoryCaptureView.swift; sourceTree = "<group>"; };
 		07A74D9246408F7693748B41 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
+		13661D8F167DBD605B5C3F0A /* MemoryTranscriber.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MemoryTranscriber.swift; sourceTree = "<group>"; };
 		1984BB5F4828A439C1D44B17 /* SongCatalogData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SongCatalogData.swift; sourceTree = "<group>"; };
 		1BE0BFE181C31B6F4C097D2A /* RootView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RootView.swift; sourceTree = "<group>"; };
 		1FAD1139F303EFA1FFD65D9E /* Orphia.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = Orphia.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -145,6 +147,7 @@
 			children = (
 				03FA6AD9C8ADD523C1F42AE1 /* AudioPlaybackManager.swift */,
 				B18366317872D6DBA81EBEE4 /* AudioRecorderManager.swift */,
+				13661D8F167DBD605B5C3F0A /* MemoryTranscriber.swift */,
 			);
 			path = Audio;
 			sourceTree = "<group>";
@@ -283,6 +286,7 @@
 				D65704713107D125A12FAE81 /* FavoritesView.swift in Sources */,
 				E290D00C60697E3E040BD126 /* HomeView.swift in Sources */,
 				E0F2D528EFF5F5934785ABD2 /* MemoryCaptureView.swift in Sources */,
+				B85F9868E6299C3B60184D12 /* MemoryTranscriber.swift in Sources */,
 				E46FCDC797C58B0BB6EA815D /* Models.swift in Sources */,
 				C3D31A4E560BE4D99A7A3217 /* MyMemoriesView.swift in Sources */,
 				79F6E8E1C93FBD806A200160 /* OrphiaApp.swift in Sources */,
