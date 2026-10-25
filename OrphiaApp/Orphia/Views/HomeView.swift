@@ -56,9 +56,6 @@ struct HomeView: View {
 
                 Button("🎧  My Memories") { path.append(.myMemories) }
                     .buttonStyle(SecondaryButtonStyle())
-
-                Button("⭐  My Favorites") { path.append(.favorites) }
-                    .buttonStyle(SecondaryButtonStyle())
             }
             .padding(20)
         }

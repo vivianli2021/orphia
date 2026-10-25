@@ -10,7 +10,6 @@ enum Route: Hashable {
     case playing
     case memoryCapture
     case myMemories
-    case favorites
 }
 
 /// Central app state shared across views via @EnvironmentObject.
