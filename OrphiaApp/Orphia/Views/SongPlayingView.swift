@@ -19,7 +19,7 @@ struct SongPlayingView: View {
     var body: some View {
         ScrollView {
             VStack(spacing: 14) {
-                YouTubePlayerView(videoID: appState.currentSong.id)
+                YouTubePlayerView(videoID: appState.currentSong.id, isPlaying: $appState.isPlaying)
                     .aspectRatio(16.0/9.0, contentMode: .fit)
                     .cornerRadius(16)
                     .background(Color.black)
@@ -34,30 +34,45 @@ struct SongPlayingView: View {
                     .font(.system(size: 13, weight: .bold))
                     .foregroundColor(AppColors.primaryDark)
 
-                HStack(spacing: 14) {
-                    ctrlButton(systemName: "hand.thumbsdown", size: 60, iconSize: 22, active: appState.thumbsDown, activeColor: AppColors.rust) {
+                // Reaction row: thumbs-down / favorite, as their own centered pair —
+                // kept separate from transport so the transport row below can be a
+                // clean, symmetric back / pause / forward layout.
+                HStack(spacing: 24) {
+                    ctrlButton(systemName: "hand.thumbsdown", size: 56, iconSize: 22, active: appState.thumbsDown, activeColor: AppColors.rust) {
                         appState.thumbsDown.toggle()
                     }
-                    ctrlButton(systemName: "heart.fill", size: 60, iconSize: 22, active: appState.isFavorite, activeColor: AppColors.carnation) {
+                    ctrlButton(systemName: "heart.fill", size: 56, iconSize: 22, active: appState.isFavorite, activeColor: AppColors.carnation) {
                         appState.isFavorite.toggle()
                     }
+                }
+                .padding(.top, 6)
+
+                // Transport row: pause/play is the true center, with back and
+                // forward symmetric on either side of it.
+                HStack(spacing: 28) {
                     Image(systemName: "backward.end.fill")
                         .font(.system(size: 22))
                         .foregroundColor(AppColors.ink)
-                        .frame(width: 60, height: 60)
+                        .frame(width: 56, height: 56)
                         .background(Color.white)
                         .overlay(Circle().stroke(AppColors.border, lineWidth: 2))
                         .clipShape(Circle())
-                    Image(systemName: "pause.fill")
-                        .font(.system(size: 30))
-                        .foregroundColor(.white)
-                        .frame(width: 76, height: 76)
-                        .background(AppColors.primary)
-                        .clipShape(Circle())
+
+                    Button {
+                        appState.isPlaying.toggle()
+                    } label: {
+                        Image(systemName: appState.isPlaying ? "pause.fill" : "play.fill")
+                            .font(.system(size: 30))
+                            .foregroundColor(.white)
+                            .frame(width: 76, height: 76)
+                            .background(AppColors.primary)
+                            .clipShape(Circle())
+                    }
+
                     Image(systemName: "forward.end.fill")
                         .font(.system(size: 22))
                         .foregroundColor(AppColors.ink)
-                        .frame(width: 60, height: 60)
+                        .frame(width: 56, height: 56)
                         .background(Color.white)
                         .overlay(Circle().stroke(AppColors.border, lineWidth: 2))
                         .clipShape(Circle())

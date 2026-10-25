@@ -26,6 +26,7 @@ final class AppState: ObservableObject {
     @Published var currentSong: Song = SongCatalog.fallbackSong(for: .seventies)
     @Published var thumbsDown: Bool = false
     @Published var isFavorite: Bool = false
+    @Published var isPlaying: Bool = true // the player autoplays on load
 
     // Saved voice-memo reflections. Seeded with a few demo entries so
     // "My Memories" isn't empty on first run, matching the wireframe.
@@ -103,6 +104,7 @@ final class AppState: ObservableObject {
         currentSong = song
         thumbsDown = false
         isFavorite = false
+        isPlaying = true
     }
 
     func addMemory(for song: Song, audioFileName: String) {
