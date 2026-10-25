@@ -34,24 +34,19 @@ struct SongPlayingView: View {
                     .font(.system(size: 13, weight: .bold))
                     .foregroundColor(AppColors.primaryDark)
 
-                // Reaction row: thumbs-down / favorite, as their own centered pair —
-                // kept separate from transport so the transport row below can be a
-                // clean, symmetric back / pause / forward layout. Mutually exclusive:
-                // AppState.toggleFavorite/toggleDislike clear the other one. A dislike
-                // also removes the song from this (and every future) playlist — see
-                // AppState.librarySections — so advance away from it if it was playing.
+                // Favorite and dislike are mutually exclusive (see AppState.toggleFavorite/
+                // toggleDislike). A dislike removes the song from Browse and favorites.
                 HStack(spacing: 24) {
                     ctrlButton(systemName: "hand.thumbsdown", size: 56, iconSize: 22, active: appState.isDisliked(appState.currentSong), activeColor: AppColors.rust) {
                         let song = appState.currentSong
-                        let oldIndex = appState.currentPlaylist.firstIndex(where: { $0.id == song.id })
+                        let oldIndex = appState.favoriteSongs.firstIndex(of: song)
                         appState.toggleDislike(song)
-                        // Disliking removes `song` from currentPlaylist, so step
-                        // using where it WAS, landing on whatever now sits at (or
-                        // just before, if it was last) that position.
-                        if appState.isDisliked(song), let oldIndex {
-                            let newPlaylist = appState.currentPlaylist
-                            if !newPlaylist.isEmpty {
-                                appState.play(newPlaylist[min(oldIndex, newPlaylist.count - 1)], context: appState.playlistContext)
+                        // In the favorites playlist, a dislike also un-favorites the
+                        // song, so move on to whatever now sits at its old position.
+                        if isFavoritesPlaylist, appState.isDisliked(song), let oldIndex {
+                            let favorites = appState.favoriteSongs
+                            if !favorites.isEmpty {
+                                appState.play(favorites[min(oldIndex, favorites.count - 1)], context: .favorites)
                             }
                         }
                     }
@@ -61,25 +56,12 @@ struct SongPlayingView: View {
                 }
                 .padding(.top, 6)
 
-                // Transport row: pause/play is the true center, with back and
-                // forward symmetric on either side of it. Back/forward step through
-                // AppState.currentPlaylist (library or favorites, whichever is
-                // active), wrapping around at either end. Dimmed + disabled rather
-                // than silently doing nothing when that playlist has nothing (or
-                // only this one song) to step to — e.g. a favorites playlist with
-                // zero or one favorite.
+                // Back/forward only exist in the favorites playlist (opened from
+                // Home's Play Favorites); songs played from Browse get pause/play alone.
                 HStack(spacing: 28) {
-                    Button { step(by: -1) } label: {
-                        Image(systemName: "backward.end.fill")
-                            .font(.system(size: 22))
-                            .foregroundColor(AppColors.ink)
-                            .frame(width: 56, height: 56)
-                            .background(Color.white)
-                            .overlay(Circle().stroke(AppColors.border, lineWidth: 2))
-                            .clipShape(Circle())
+                    if isFavoritesPlaylist {
+                        stepButton(systemName: "backward.end.fill") { step(by: -1) }
                     }
-                    .disabled(!canStep)
-                    .opacity(canStep ? 1 : 0.4)
 
                     Button {
                         appState.isPlaying.toggle()
@@ -92,17 +74,9 @@ struct SongPlayingView: View {
                             .clipShape(Circle())
                     }
 
-                    Button { step(by: 1) } label: {
-                        Image(systemName: "forward.end.fill")
-                            .font(.system(size: 22))
-                            .foregroundColor(AppColors.ink)
-                            .frame(width: 56, height: 56)
-                            .background(Color.white)
-                            .overlay(Circle().stroke(AppColors.border, lineWidth: 2))
-                            .clipShape(Circle())
+                    if isFavoritesPlaylist {
+                        stepButton(systemName: "forward.end.fill") { step(by: 1) }
                     }
-                    .disabled(!canStep)
-                    .opacity(canStep ? 1 : 0.4)
                 }
                 .padding(.top, 4)
 
@@ -117,24 +91,41 @@ struct SongPlayingView: View {
         .navigationBarTitleDisplayMode(.inline)
     }
 
-    /// False when the active playlist has nothing else to step to — empty, or
-    /// just this one song (e.g. a favorites playlist with only the song
-    /// currently playing).
+    private var isFavoritesPlaylist: Bool { appState.playlistContext == .favorites }
+
+    /// False when there's no other favorite to step to (zero favorites, or only
+    /// the one currently playing).
     private var canStep: Bool {
-        appState.currentPlaylist.count > 1
+        appState.favoriteSongs.contains { $0.id != appState.currentSong.id }
     }
 
-    /// Moves to the adjacent song in AppState.currentPlaylist (library or
-    /// favorites, whichever is active), wrapping around at either end (delta
-    /// is +1 for forward, -1 for back). The playlist can be empty (e.g. a
-    /// favorites playlist with nothing favorited) — then this is a no-op
-    /// rather than a crash.
+    /// Steps through favorites with wraparound. If the current song was just
+    /// un-hearted (so it's no longer in the list), forward goes to the first
+    /// favorite and back to the last.
     private func step(by delta: Int) {
-        let playlist = appState.currentPlaylist
-        guard !playlist.isEmpty,
-              let currentIndex = playlist.firstIndex(where: { $0.id == appState.currentSong.id }) else { return }
-        let nextIndex = (currentIndex + delta + playlist.count) % playlist.count
-        appState.play(playlist[nextIndex], context: appState.playlistContext)
+        let favorites = appState.favoriteSongs
+        guard !favorites.isEmpty else { return }
+        let next: Song
+        if let index = favorites.firstIndex(of: appState.currentSong) {
+            next = favorites[(index + delta + favorites.count) % favorites.count]
+        } else {
+            next = delta > 0 ? favorites[0] : favorites[favorites.count - 1]
+        }
+        appState.play(next, context: .favorites)
+    }
+
+    private func stepButton(systemName: String, action: @escaping () -> Void) -> some View {
+        Button(action: action) {
+            Image(systemName: systemName)
+                .font(.system(size: 22))
+                .foregroundColor(AppColors.ink)
+                .frame(width: 56, height: 56)
+                .background(Color.white)
+                .overlay(Circle().stroke(AppColors.border, lineWidth: 2))
+                .clipShape(Circle())
+        }
+        .disabled(!canStep)
+        .opacity(canStep ? 1 : 0.4)
     }
 
     private func ctrlButton(systemName: String, size: CGFloat, iconSize: CGFloat, active: Bool, activeColor: Color, action: @escaping () -> Void) -> some View {

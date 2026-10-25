@@ -1,9 +1,9 @@
 import SwiftUI
 
 /// Core structure kept from the original sketch: welcome message plus big,
-/// clearly separated actions. "Continue listening" and "Play Favorites" pull
-/// real songs personalized to the resident's age bracket (and, when set,
-/// their selected genres) from `AppState.librarySections` — not a fixed pair.
+/// clearly separated actions. "Continue listening" pulls a real song
+/// personalized to the resident's age bracket and selected genres;
+/// "Play Favorites" opens the list of songs they've hearted.
 /// "My Memories" gives reflection its own front-door from Home instead of
 /// only being reachable mid-playback.
 struct HomeView: View {
@@ -13,7 +13,6 @@ struct HomeView: View {
     @State private var confirmingSignOut = false
 
     private var continueSong: Song { appState.defaultSong }
-    private var favoriteSong: Song { appState.favoriteSong }
 
     var body: some View {
         ScrollView {
@@ -48,15 +47,8 @@ struct HomeView: View {
                 Button("▶  Play Music") { path.append(.browse) }
                     .buttonStyle(PrimaryButtonStyle())
 
-                Button("♥  Play Favorites") {
-                    // Only enter the favorites playlist context if there's a real
-                    // favorite to play — `favoriteSong` falls back to a library pick
-                    // when favoriteSongs is empty, so forward/back should browse the
-                    // library in that case, not land in an empty favorites playlist.
-                    appState.play(favoriteSong, context: appState.favoriteSongs.isEmpty ? .library : .favorites)
-                    path.append(.playing)
-                }
-                .buttonStyle(SecondaryButtonStyle())
+                Button("♥  Play Favorites") { path.append(.favorites) }
+                    .buttonStyle(SecondaryButtonStyle())
 
                 Button("🎧  My Memories") { path.append(.myMemories) }
                     .buttonStyle(SecondaryButtonStyle())

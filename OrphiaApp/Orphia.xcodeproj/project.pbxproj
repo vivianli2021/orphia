@@ -29,6 +29,7 @@
 		CD76BD276075CFD5518401A8 /* BrowseView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9B894613069227926B649DC /* BrowseView.swift */; };
 		D048B7D44FFE58BBA403D036 /* AudioRecorderManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = B18366317872D6DBA81EBEE4 /* AudioRecorderManager.swift */; };
 		D654CCBD807C5709264161CD /* YouTubePlayerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65EB052238EC1ACC7C7FD1FE /* YouTubePlayerView.swift */; };
+		D65704713107D125A12FAE81 /* FavoritesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D5ABEF60C3D15D911341968 /* FavoritesView.swift */; };
 		D8862E6EF4C0368ABD527239 /* AppState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FBF32C1197F66DE7648BA45 /* AppState.swift */; };
 		E0F2D528EFF5F5934785ABD2 /* MemoryCaptureView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0618DD8BC37BA6F000B12E23 /* MemoryCaptureView.swift */; };
 		E290D00C60697E3E040BD126 /* HomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54147F700415AB05FEA46488 /* HomeView.swift */; };
@@ -54,6 +55,7 @@
 		6FB61696B0C361D05D6F63C6 /* AgeBracket.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AgeBracket.swift; sourceTree = "<group>"; };
 		75E50C228C628300CEFE6FA2 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		767387540D348015A2D61AD1 /* App.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = App.xcconfig; sourceTree = "<group>"; };
+		7D5ABEF60C3D15D911341968 /* FavoritesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavoritesView.swift; sourceTree = "<group>"; };
 		8C08D61249E52295D5B25DB3 /* SongPlayingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SongPlayingView.swift; sourceTree = "<group>"; };
 		9097B83D0CA5BB948A72A75C /* OrphiaApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrphiaApp.swift; sourceTree = "<group>"; };
 		90B18A6E0AAEA8AB0A3089E2 /* SignUpNameView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignUpNameView.swift; sourceTree = "<group>"; };
@@ -168,6 +170,7 @@
 			isa = PBXGroup;
 			children = (
 				B9B894613069227926B649DC /* BrowseView.swift */,
+				7D5ABEF60C3D15D911341968 /* FavoritesView.swift */,
 				54147F700415AB05FEA46488 /* HomeView.swift */,
 				0618DD8BC37BA6F000B12E23 /* MemoryCaptureView.swift */,
 				281A3469F57132CCAA20F09B /* MyMemoriesView.swift */,
@@ -277,6 +280,7 @@
 				CD76BD276075CFD5518401A8 /* BrowseView.swift in Sources */,
 				E48F50C63DD7E9EE09F3C455 /* ButtonStyles.swift in Sources */,
 				28C98ACAFB3522FEDD8B8BD0 /* CarnationLogo.swift in Sources */,
+				D65704713107D125A12FAE81 /* FavoritesView.swift in Sources */,
 				E290D00C60697E3E040BD126 /* HomeView.swift in Sources */,
 				E0F2D528EFF5F5934785ABD2 /* MemoryCaptureView.swift in Sources */,
 				E46FCDC797C58B0BB6EA815D /* Models.swift in Sources */,

@@ -1,9 +1,8 @@
 import Foundation
 import SwiftUI
 
-/// Which song list Song Playing's forward/back buttons step through —
-/// separate playlists so playing from Favorites doesn't wander into the full
-/// library, and vice versa.
+/// Where the current song was picked from. Only `.favorites` gets back/forward
+/// buttons on Song Playing; songs picked from Browse play one at a time.
 enum PlaylistContext {
     case library
     case favorites
@@ -18,6 +17,7 @@ enum Route: Hashable {
     case playing
     case memoryCapture
     case myMemories
+    case favorites
 }
 
 /// Central app state shared across views via @EnvironmentObject.
@@ -72,25 +72,11 @@ final class AppState: ObservableObject {
     /// preference and decade (age bracket), and never trimmed within a shown
     /// genre: a genre with 4 or 10 songs in the dataset shows all 4 or all 10.
     /// Disliked songs are filtered out here, so a dislike removes a song from
-    /// this playlist and every future one built from it (Browse, Home, the
-    /// Song Playing screen's forward/back) without needing to touch the CSV.
+    /// Browse and Home from then on without needing to touch the CSV.
     var librarySections: [(genre: Genre, songs: [Song])] {
         SongCatalog.sections(for: ageBracket, genreOrder: genreOrder)
             .map { (genre: $0.genre, songs: $0.songs.filter { !dislikedSongIDs.contains($0.id) }) }
             .filter { !$0.songs.isEmpty }
-    }
-
-    /// What Song Playing's forward/back buttons step through, per
-    /// `playlistContext`: the full personalized library (Browse's genre
-    /// sections flattened in display order), or just the favorited songs.
-    /// Can legitimately be empty — e.g. a resident with zero favorites who
-    /// plays one from the fallback pick, or the last favorite just got
-    /// un-hearted — callers must handle that, not assume at least one song.
-    var currentPlaylist: [Song] {
-        switch playlistContext {
-        case .library: return librarySections.flatMap { $0.songs }
-        case .favorites: return favoriteSongs
-        }
     }
 
     var defaultSong: Song {
@@ -98,28 +84,12 @@ final class AppState: ObservableObject {
     }
 
     /// Every song the resident has favorited, most recently favorited first —
-    /// backs the Favorites screen. Looked up across the whole catalog (not
-    /// filtered to the current bracket/genre picks), so a favorite never
-    /// silently disappears if genre preferences change later.
+    /// the Play Favorites list and its back/forward playlist. Looked up across
+    /// the whole catalog (not filtered to the current bracket/genre picks), so
+    /// a favorite never silently disappears if genre preferences change later.
+    /// Can be empty.
     var favoriteSongs: [Song] {
         favoriteSongIDs.compactMap { SongCatalog.song(id: $0) }
-    }
-
-    /// Used by Home's "Play Favorites" quick action: the most recent real
-    /// favorite if the resident has one, otherwise a sensible fallback pick
-    /// from their personalized library so the button is never a dead end.
-    var favoriteSong: Song {
-        if let mostRecentFavorite = favoriteSongs.first {
-            return mostRecentFavorite
-        }
-        let sections = librarySections
-        if let first = sections.first, first.songs.count > 1 {
-            return first.songs[1]
-        }
-        if sections.count > 1, let secondGenreSong = sections[1].songs.first {
-            return secondGenreSong
-        }
-        return SongCatalog.fallbackSong(for: ageBracket)
     }
 
     func isFavorite(_ song: Song) -> Bool { favoriteSongIDs.contains(song.id) }
