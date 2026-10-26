@@ -34,6 +34,11 @@ struct MyMemoriesView: View {
                                     Text("\(memory.song.artist) · \(memory.dateLabel)")
                                         .font(.system(size: 13))
                                         .foregroundColor(AppColors.muted)
+                                    if !memory.isBackedUp {
+                                        Label("Saved on this phone — backing up", systemImage: "icloud.and.arrow.up")
+                                            .font(.system(size: 12))
+                                            .foregroundColor(AppColors.muted)
+                                    }
                                 }
                                 Spacer()
                             }
@@ -69,6 +74,7 @@ struct MyMemoriesView: View {
         .background(AppColors.bg)
         .navigationTitle("My Memories")
         .navigationBarTitleDisplayMode(.inline)
+        .onAppear { appState.retryPendingUploads() }
         .sheet(item: $transcriptFor) { ref in
             MemoryTranscriptView(memoryID: ref.id) { song in
                 transcriptFor = nil

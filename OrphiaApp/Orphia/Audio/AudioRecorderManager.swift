@@ -2,7 +2,8 @@ import Foundation
 import AVFoundation
 
 /// Records short voice-memo reflections to the app's Documents directory.
-/// MVP scope: recordings are private to the resident only — no sharing/upload here.
+/// Recordings are private to the resident; AppState hands saved ones to
+/// MemorySync, which backs them up to their own Supabase folder.
 final class AudioRecorderManager: NSObject, ObservableObject {
     @Published var isRecording = false
     @Published var elapsedSeconds = 0

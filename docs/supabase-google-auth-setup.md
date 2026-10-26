@@ -170,8 +170,7 @@ create policy "Users can update their own profile"
 Check that it worked: **Table Editor** should list `profiles` with an
 "RLS enabled" badge.
 
-(Voice-memo storage, meaning the `memories` table and a private `memos`
-bucket, is a separate follow-up and isn't needed for sign-in.)
+(Voice-memo storage is set up separately in **Part 6**.)
 
 ---
 
@@ -208,3 +207,81 @@ Please also confirm these product choices:
   New users go on to the birth-year and genre steps, which save to
   `profiles`. Returning users go straight to Home. The session stays signed
   in between launches, and the profile menu gets a **Sign out** option.
+
+---
+
+## Part 6 — Voice-memo storage (`memories` table + private `memos` bucket)
+
+Each recording is saved on the phone first, so it plays right away. Then
+it's uploaded in the background: the audio file goes to a **private**
+Storage bucket, and a row describing it goes in the `memories` table. If
+the upload fails (for example, no Wi-Fi), the app tries again the next time
+My Memories opens or the resident signs in.
+
+In Supabase, open **SQL Editor → New query**, paste this, and click **Run**:
+
+```sql
+-- One row per saved voice memo.
+create table public.memories (
+  id            uuid primary key,
+  user_id       uuid not null default auth.uid() references auth.users (id) on delete cascade,
+  song_id       text not null,            -- YouTube video id from the song catalog
+  audio_path    text not null,            -- path inside the "memos" bucket
+  duration_sec  int,
+  transcript    text,
+  created_at    timestamptz not null default now()
+);
+
+create index memories_user_created_idx on public.memories (user_id, created_at desc);
+
+-- Row Level Security: each resident can only see and change their own memories.
+-- (Sharing with family later = adding another select policy, not a redesign.)
+alter table public.memories enable row level security;
+
+create policy "Users can read their own memories"
+  on public.memories for select
+  using (auth.uid() = user_id);
+
+create policy "Users can add their own memories"
+  on public.memories for insert
+  with check (auth.uid() = user_id);
+
+create policy "Users can update their own memories"
+  on public.memories for update
+  using (auth.uid() = user_id)
+  with check (auth.uid() = user_id);
+
+create policy "Users can delete their own memories"
+  on public.memories for delete
+  using (auth.uid() = user_id);
+
+-- Private bucket for the audio files (10 MB cap per file; memos are ~0.5 MB).
+insert into storage.buckets (id, name, public, file_size_limit, allowed_mime_types)
+values ('memos', 'memos', false, 10485760, array['audio/mp4', 'audio/m4a', 'audio/x-m4a']);
+
+-- Files live at memos/<user id>/<memory id>.m4a. Each resident can only
+-- touch files inside their own folder.
+create policy "Users can read their own memo files"
+  on storage.objects for select to authenticated
+  using (bucket_id = 'memos' and (storage.foldername(name))[1] = auth.uid()::text);
+
+create policy "Users can upload their own memo files"
+  on storage.objects for insert to authenticated
+  with check (bucket_id = 'memos' and (storage.foldername(name))[1] = auth.uid()::text);
+
+create policy "Users can replace their own memo files"
+  on storage.objects for update to authenticated
+  using (bucket_id = 'memos' and (storage.foldername(name))[1] = auth.uid()::text);
+
+create policy "Users can delete their own memo files"
+  on storage.objects for delete to authenticated
+  using (bucket_id = 'memos' and (storage.foldername(name))[1] = auth.uid()::text);
+```
+
+Check that it worked:
+- **Table Editor** lists `memories` with an "RLS enabled" badge.
+- **Storage** lists a `memos` bucket marked **Private**.
+- After you record a memory in the app, **Storage → memos** has a folder
+  named with your user id, holding an `.m4a` file, and **Table Editor →
+  memories** has a matching row.
+

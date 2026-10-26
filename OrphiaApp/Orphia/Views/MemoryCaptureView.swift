@@ -43,7 +43,11 @@ struct MemoryCaptureView: View {
 
             Button("Save Memory") {
                 if let fileName = recorderManager.lastRecordingFileName {
-                    appState.addMemory(for: appState.currentSong, audioFileName: fileName)
+                    appState.addMemory(
+                        for: appState.currentSong,
+                        recordingFileName: fileName,
+                        durationSeconds: recorderManager.elapsedSeconds
+                    )
                 }
                 path.removeLast()
             }

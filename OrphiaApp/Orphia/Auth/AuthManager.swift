@@ -94,6 +94,7 @@ final class AuthManager: ObservableObject {
 
     private func finishSignIn(userId: UUID, googleName: String?, appState: AppState) async throws {
         self.userId = userId
+        appState.userId = userId
         let rows: [Profile] = try await supabase
             .from("profiles")
             .select()
@@ -108,6 +109,8 @@ final class AuthManager: ObservableObject {
             appState.firstName = googleName
         }
         status = rows.first?.isComplete == true ? .signedIn : .needsOnboarding
+        // Not awaited — memories load in the background so sign-in isn't held up.
+        Task { await appState.loadMemories() }
     }
 
     /// The view controller Google's sign-in sheet presents from.

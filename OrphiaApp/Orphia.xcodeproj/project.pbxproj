@@ -10,6 +10,7 @@
 		28626FA79DF98761C040164B /* SignUpGenresView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58FDE6D7B658DA9D7D234409 /* SignUpGenresView.swift */; };
 		2B1B9BFF3342DA8C210D4AE7 /* AgeBracket.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6FB61696B0C361D05D6F63C6 /* AgeBracket.swift */; };
 		3346A4225D2CD5069523A615 /* SignUpBirthYearView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 66E81FCE9C3A71A42708549E /* SignUpBirthYearView.swift */; };
+		3C645E37E773B2D73C0786F3 /* MemorySync.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D6ECB90697A2B9A9B2584FA /* MemorySync.swift */; };
 		42D3AA17F31F23326D535AE2 /* GoogleSignIn in Frameworks */ = {isa = PBXBuildFile; productRef = FE1DD44113747F573723D140 /* GoogleSignIn */; };
 		465398F43DE63BF8C5911F7D /* SongCatalogData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1984BB5F4828A439C1D44B17 /* SongCatalogData.swift */; };
 		4F789E8D499F2A21E77F55EC /* TitleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA50181CB16F79112A094F66 /* TitleView.swift */; };
@@ -58,6 +59,7 @@
 		767387540D348015A2D61AD1 /* App.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = App.xcconfig; sourceTree = "<group>"; };
 		7D5ABEF60C3D15D911341968 /* FavoritesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavoritesView.swift; sourceTree = "<group>"; };
 		8C08D61249E52295D5B25DB3 /* SongPlayingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SongPlayingView.swift; sourceTree = "<group>"; };
+		8D6ECB90697A2B9A9B2584FA /* MemorySync.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MemorySync.swift; sourceTree = "<group>"; };
 		9097B83D0CA5BB948A72A75C /* OrphiaApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrphiaApp.swift; sourceTree = "<group>"; };
 		90B18A6E0AAEA8AB0A3089E2 /* SignUpNameView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignUpNameView.swift; sourceTree = "<group>"; };
 		9FBF32C1197F66DE7648BA45 /* AppState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppState.swift; sourceTree = "<group>"; };
@@ -135,6 +137,7 @@
 			isa = PBXGroup;
 			children = (
 				FAE5E8C20BBE5A346047F50D /* AuthManager.swift */,
+				8D6ECB90697A2B9A9B2584FA /* MemorySync.swift */,
 				EED3D0C466F9919FE3DEE49F /* Supabase.swift */,
 			);
 			path = Auth;
@@ -282,6 +285,7 @@
 				D65704713107D125A12FAE81 /* FavoritesView.swift in Sources */,
 				E290D00C60697E3E040BD126 /* HomeView.swift in Sources */,
 				E0F2D528EFF5F5934785ABD2 /* MemoryCaptureView.swift in Sources */,
+				3C645E37E773B2D73C0786F3 /* MemorySync.swift in Sources */,
 				B85F9868E6299C3B60184D12 /* MemoryTranscriber.swift in Sources */,
 				E46FCDC797C58B0BB6EA815D /* Models.swift in Sources */,
 				C3D31A4E560BE4D99A7A3217 /* MyMemoriesView.swift in Sources */,

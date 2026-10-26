@@ -22,9 +22,12 @@ enum Route: Hashable {
 
 /// Central app state shared across views via @EnvironmentObject.
 /// The resident's profile (name, birth year, genres) is loaded from and saved
-/// to Supabase by `AuthManager`; memories and now-playing state still live in
-/// memory for now.
+/// to Supabase by `AuthManager`. Voice memos are saved on the phone and backed
+/// up to Supabase by `MemorySync`; now-playing state lives in memory only.
 final class AppState: ObservableObject {
+    /// Supabase user id of the signed-in resident; set by AuthManager.
+    var userId: UUID?
+
     // Profile captured during onboarding, or loaded from Supabase on sign-in.
     @Published var firstName: String = ""
     @Published var birthYear: String = ""
@@ -41,13 +44,10 @@ final class AppState: ObservableObject {
     @Published private(set) var favoriteSongIDs: [String] = []
     @Published private(set) var dislikedSongIDs: Set<String> = []
 
-    // Saved voice-memo reflections. Seeded with a few demo entries so
-    // "My Memories" isn't empty on first run, matching the wireframe.
-    @Published var memories: [Memory] = [
-        Memory(id: UUID(), song: SongCatalog.song(id: "y3KJ7d2qBoA")!, dateLabel: "Oct 12", audioFileName: ""),
-        Memory(id: UUID(), song: SongCatalog.song(id: "c977QdbTImU")!, dateLabel: "Oct 9", audioFileName: ""),
-        Memory(id: UUID(), song: SongCatalog.song(id: "E3McBWuZiuE")!, dateLabel: "Oct 3", audioFileName: ""),
-    ]
+    // Saved voice-memo reflections, newest first. Loaded from Supabase on
+    // sign-in (see loadMemories), plus any recorded here that haven't
+    // finished uploading.
+    @Published var memories: [Memory] = []
 
     static let maxGenres = 4
 
@@ -148,6 +148,8 @@ final class AppState: ObservableObject {
         selectedGenres = []
         favoriteSongIDs = []
         dislikedSongIDs = []
+        memories = []
+        userId = nil
     }
 
     func play(_ song: Song, context: PlaylistContext = .library) {
@@ -156,10 +158,110 @@ final class AppState: ObservableObject {
         playlistContext = context
     }
 
-    func addMemory(for song: Song, audioFileName: String) {
-        let memory = Memory(id: UUID(), song: song, dateLabel: "Today", audioFileName: audioFileName)
+    /// Saves a new recording: renames the file to match the memory's id, adds
+    /// it to the list right away, then transcribes and uploads it in the background.
+    func addMemory(for song: Song, recordingFileName: String, durationSeconds: Int) {
+        let id = UUID()
+        let fileName = MemorySync.localFileName(for: id)
+        let documents = AudioRecorderManager.documentsDirectory()
+        do {
+            try FileManager.default.moveItem(
+                at: documents.appendingPathComponent(recordingFileName),
+                to: documents.appendingPathComponent(fileName)
+            )
+        } catch {
+            return
+        }
+
+        let memory = Memory(id: id, song: song, createdAt: Date(), audioFileName: fileName, durationSeconds: durationSeconds)
         memories.insert(memory, at: 0)
-        transcribeMemory(id: memory.id)
+        if let userId {
+            PendingMemoryUploads.add(.init(
+                id: id, userId: userId, songId: song.id,
+                durationSeconds: durationSeconds, createdAt: memory.createdAt
+            ))
+        }
+        transcribeMemory(id: id)
+        uploadMemory(id: id)
+    }
+
+    /// Copies a memory up to Supabase. On failure it stays in the pending
+    /// list and is retried by retryPendingUploads / the next sign-in.
+    func uploadMemory(id: UUID) {
+        guard let userId, let memory = memories.first(where: { $0.id == id }), !memory.isBackedUp else { return }
+        Task { @MainActor in
+            do {
+                try await MemorySync.upload(memory, userId: userId)
+                PendingMemoryUploads.remove(id: id)
+                if let i = self.memories.firstIndex(where: { $0.id == id }) {
+                    self.memories[i].isBackedUp = true
+                }
+            } catch {
+                // Stays pending; retried later.
+            }
+        }
+    }
+
+    func retryPendingUploads() {
+        for memory in memories where !memory.isBackedUp {
+            uploadMemory(id: memory.id)
+        }
+    }
+
+    /// Rebuilds the memory list from Supabase after sign-in, keeps any
+    /// recordings that are still waiting to upload, and downloads audio
+    /// that isn't on this phone yet (e.g. after a reinstall).
+    @MainActor
+    func loadMemories() async {
+        guard let userId else { return }
+        let rows: [MemorySync.Row]
+        do {
+            rows = try await MemorySync.fetchAll()
+        } catch {
+            rows = []
+        }
+        guard self.userId == userId else { return } // signed out meanwhile
+
+        var loaded: [Memory] = rows.compactMap { row in
+            guard let song = SongCatalog.song(id: row.songId) else { return nil }
+            return Memory(
+                id: row.id,
+                song: song,
+                createdAt: row.createdAt,
+                audioFileName: MemorySync.localFileName(for: row.id),
+                durationSeconds: row.durationSec,
+                transcript: row.transcript.map { .done($0) } ?? .notStarted,
+                isBackedUp: true
+            )
+        }
+        let savedIDs = Set(rows.map(\.id))
+        for entry in PendingMemoryUploads.entries(for: userId) {
+            if savedIDs.contains(entry.id) {
+                PendingMemoryUploads.remove(id: entry.id)
+                continue
+            }
+            let fileName = MemorySync.localFileName(for: entry.id)
+            guard let song = SongCatalog.song(id: entry.songId),
+                  FileManager.default.fileExists(atPath: AudioRecorderManager.documentsDirectory().appendingPathComponent(fileName).path)
+            else {
+                PendingMemoryUploads.remove(id: entry.id)
+                continue
+            }
+            loaded.append(Memory(
+                id: entry.id, song: song, createdAt: entry.createdAt,
+                audioFileName: fileName, durationSeconds: entry.durationSeconds
+            ))
+        }
+        memories = loaded.sorted { $0.createdAt > $1.createdAt }
+        retryPendingUploads()
+
+        for row in rows {
+            let fileName = MemorySync.localFileName(for: row.id)
+            let url = AudioRecorderManager.documentsDirectory().appendingPathComponent(fileName)
+            if !FileManager.default.fileExists(atPath: url.path) {
+                try? await MemorySync.download(row, to: fileName)
+            }
+        }
     }
 
     /// Writes out a memory's recording as text and stores it on the memory.
@@ -185,6 +287,11 @@ final class AppState: ObservableObject {
             }
             if let i = self.memories.firstIndex(where: { $0.id == id }) {
                 self.memories[i].transcript = result
+            }
+            // Back up the text too. If the upload hasn't happened yet, it
+            // includes the transcript itself, so a failure here is harmless.
+            if case .done(let text) = result, self.userId != nil {
+                try? await MemorySync.saveTranscript(text, memoryId: id)
             }
         }
     }

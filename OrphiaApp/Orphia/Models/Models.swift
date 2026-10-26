@@ -39,9 +39,18 @@ struct Song: Identifiable, Hashable {
 struct Memory: Identifiable, Hashable {
     let id: UUID
     let song: Song
-    let dateLabel: String
-    let audioFileName: String // file in the app's Documents directory; empty for demo-seeded memories
+    let createdAt: Date
+    let audioFileName: String // file in the app's Documents directory (see MemorySync.localFileName)
+    var durationSeconds: Int?
     var transcript: TranscriptStatus = .notStarted
+    var isBackedUp = false // true once the recording and its row are saved to Supabase
+
+    var dateLabel: String {
+        let calendar = Calendar.current
+        if calendar.isDateInToday(createdAt) { return "Today" }
+        if calendar.isDateInYesterday(createdAt) { return "Yesterday" }
+        return createdAt.formatted(.dateTime.month(.abbreviated).day())
+    }
 }
 
 enum TranscriptStatus: Hashable {
