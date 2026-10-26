@@ -8,7 +8,6 @@
 
 /* Begin PBXBuildFile section */
 		28626FA79DF98761C040164B /* SignUpGenresView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58FDE6D7B658DA9D7D234409 /* SignUpGenresView.swift */; };
-		28C98ACAFB3522FEDD8B8BD0 /* CarnationLogo.swift in Sources */ = {isa = PBXBuildFile; fileRef = F5B072BF375ACB88BD27529A /* CarnationLogo.swift */; };
 		2B1B9BFF3342DA8C210D4AE7 /* AgeBracket.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6FB61696B0C361D05D6F63C6 /* AgeBracket.swift */; };
 		3346A4225D2CD5069523A615 /* SignUpBirthYearView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 66E81FCE9C3A71A42708549E /* SignUpBirthYearView.swift */; };
 		42D3AA17F31F23326D535AE2 /* GoogleSignIn in Frameworks */ = {isa = PBXBuildFile; productRef = FE1DD44113747F573723D140 /* GoogleSignIn */; };
@@ -68,7 +67,6 @@
 		B9B894613069227926B649DC /* BrowseView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BrowseView.swift; sourceTree = "<group>"; };
 		BB391039AB05209B73D21958 /* AppColors.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppColors.swift; sourceTree = "<group>"; };
 		EED3D0C466F9919FE3DEE49F /* Supabase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Supabase.swift; sourceTree = "<group>"; };
-		F5B072BF375ACB88BD27529A /* CarnationLogo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CarnationLogo.swift; sourceTree = "<group>"; };
 		FAE5E8C20BBE5A346047F50D /* AuthManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthManager.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -156,7 +154,6 @@
 			isa = PBXGroup;
 			children = (
 				BB391039AB05209B73D21958 /* AppColors.swift */,
-				F5B072BF375ACB88BD27529A /* CarnationLogo.swift */,
 			);
 			path = Theme;
 			sourceTree = "<group>";
@@ -282,7 +279,6 @@
 				964B6D2E49ECF51C788A67D4 /* AuthManager.swift in Sources */,
 				CD76BD276075CFD5518401A8 /* BrowseView.swift in Sources */,
 				E48F50C63DD7E9EE09F3C455 /* ButtonStyles.swift in Sources */,
-				28C98ACAFB3522FEDD8B8BD0 /* CarnationLogo.swift in Sources */,
 				D65704713107D125A12FAE81 /* FavoritesView.swift in Sources */,
 				E290D00C60697E3E040BD126 /* HomeView.swift in Sources */,
 				E0F2D528EFF5F5934785ABD2 /* MemoryCaptureView.swift in Sources */,

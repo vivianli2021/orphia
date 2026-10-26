@@ -54,7 +54,11 @@ struct RootView: View {
 private struct LaunchView: View {
     var body: some View {
         VStack(spacing: 16) {
-            CarnationLogo(size: 90, withStem: true)
+            Image("OrphiaLogo")
+                .resizable()
+                .scaledToFit()
+                .frame(height: 220)
+                .accessibilityHidden(true)
             ProgressView()
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)

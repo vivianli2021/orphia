@@ -10,8 +10,12 @@ struct TitleView: View {
     var body: some View {
         VStack {
             Spacer()
-            CarnationLogo(size: 90, withStem: true)
-                .padding(.bottom, 8)
+            Image("OrphiaLogo")
+                .resizable()
+                .scaledToFit()
+                .frame(height: 220)
+                .accessibilityHidden(true)
+                .padding(.bottom, 12)
             Text("Orphia")
                 .font(.system(size: 34, weight: .bold))
                 .foregroundColor(AppColors.primaryDark)
